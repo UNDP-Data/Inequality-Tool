@@ -54,6 +54,10 @@ export const DumbellChart = (props: Props) => {
     }
     return null;
   });
+  let arrayLength = 0;
+  formattedData.forEach((d) => {
+    arrayLength = d ? arrayLength + 1 : arrayLength;
+  });
   const maxRatio = maxBy(formattedData, 'ratio');
   const sortedData = sortBy(formattedData, sortedBy);
   const xPos = scaleLinear().domain([0, 1]).range([0, graphWidth - leftPadding - rightPadding]).nice();
@@ -70,7 +74,7 @@ export const DumbellChart = (props: Props) => {
           <div>Top 10%</div>
         </LegendEl>
       </LegendContainerEl>
-      <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth} ${(formattedData.length * rowHeight) + marginTop}`}>
+      <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth} ${(arrayLength * rowHeight) + marginTop}`}>
         <text
           x={0}
           y={0}
