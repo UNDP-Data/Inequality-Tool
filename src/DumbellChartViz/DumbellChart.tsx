@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import sortBy from 'lodash.sortby';
+import maxBy from 'lodash.maxby';
 import { scaleLinear } from 'd3-scale';
 import { DataType } from '../Types';
 
@@ -38,8 +39,9 @@ export const DumbellChart = (props: Props) => {
   const { data, year, sortedBy } = props;
   const graphWidth = 1280;
   const leftPadding = 230;
+  const rightPadding = 200;
   const rowHeight = 35;
-  const marginTop = 15;
+  const marginTop = 50;
   const formattedData = data.map((d) => {
     if (d.data.findIndex((el) => el.year === year) !== -1) {
       return ({
@@ -47,12 +49,15 @@ export const DumbellChart = (props: Props) => {
         top10WID: d.data[d.data.findIndex((el) => el.year === year)].top10WID,
         bottom40WID: d.data[d.data.findIndex((el) => el.year === year)].bottom40WID,
         diff: d.data[d.data.findIndex((el) => el.year === year)].top10WID - d.data[d.data.findIndex((el) => el.year === year)].bottom40WID,
+        ratio: d.data[d.data.findIndex((el) => el.year === year)].bottom40WID / d.data[d.data.findIndex((el) => el.year === year)].top10WID,
       });
     }
     return null;
   });
+  const maxRatio = maxBy(formattedData, 'ratio');
   const sortedData = sortBy(formattedData, sortedBy);
-  const xPos = scaleLinear().domain([0, 1]).range([0, graphWidth - leftPadding]).nice();
+  const xPos = scaleLinear().domain([0, 1]).range([0, graphWidth - leftPadding - rightPadding]).nice();
+  const widthScale = scaleLinear().domain([0, maxRatio?.ratio as number]).range([0, rightPadding - 30]).nice();
   return (
     <>
       <LegendContainerEl>
@@ -66,6 +71,68 @@ export const DumbellChart = (props: Props) => {
         </LegendEl>
       </LegendContainerEl>
       <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth} ${(formattedData.length * rowHeight) + marginTop}`}>
+        <text
+          x={0}
+          y={0}
+          dy='30px'
+          fontSize='14px'
+          color='#110848'
+          fontWeight={700}
+        >
+          Countries
+        </text>
+        <g>
+          <text
+            x={leftPadding}
+            y={0}
+            dy='30px'
+            fontSize='14px'
+            color='#110848'
+            fontWeight={700}
+          >
+            Wealth Share Difference
+          </text>
+          <circle
+            cx={leftPadding + 180}
+            cy={25}
+            r={5}
+            fill='#E26B8D'
+          />
+          <text
+            x={leftPadding + 190}
+            y={0}
+            dy='30px'
+            fontSize='14px'
+            color='#E26B8D'
+          >
+            Bottom 40%
+          </text>
+          <circle
+            cx={leftPadding + 285}
+            cy={25}
+            r={5}
+            fill='#266291'
+          />
+          <text
+            x={leftPadding + 295}
+            y={0}
+            dy='30px'
+            fontSize='14px'
+            color='#266291'
+          >
+            Top 10%
+          </text>
+        </g>
+        <text
+          x={graphWidth - rightPadding + 20}
+          y={0}
+          dy='30px'
+          fontSize='14px'
+          color='#110848'
+          fontWeight={700}
+        >
+          Wealth Share Ratio
+        </text>
         {
           sortedData.map((d, i) => (
             d
@@ -85,7 +152,7 @@ export const DumbellChart = (props: Props) => {
                   </text>
                   <line
                     x1={leftPadding}
-                    x2={graphWidth}
+                    x2={graphWidth - rightPadding}
                     y1={rowHeight / 2}
                     y2={rowHeight / 2}
                     stroke='#AAA'
@@ -135,6 +202,24 @@ export const DumbellChart = (props: Props) => {
                   >
                     {(d.top10WID * 100).toFixed(2)}
                     %
+                  </text>
+                  <rect
+                    x={graphWidth - rightPadding + 20}
+                    y={rowHeight / 2 - 10}
+                    height={20}
+                    fill='#110848'
+                    width={widthScale(d.ratio)}
+                  />
+                  <text
+                    x={widthScale(d.ratio) < 50 ? graphWidth - rightPadding + 20 + widthScale(d.ratio) + 5 : graphWidth - rightPadding + 20 + widthScale(d.ratio) - 5}
+                    y={rowHeight / 2}
+                    dy='4'
+                    fontSize='14px'
+                    fill={widthScale(d.ratio) < 50 ? '#110848' : '#FFF'}
+                    fontWeight={700}
+                    textAnchor={widthScale(d.ratio) < 50 ? 'start' : 'end'}
+                  >
+                    {(d.ratio).toFixed(2)}
                   </text>
                 </g>
               ) : null

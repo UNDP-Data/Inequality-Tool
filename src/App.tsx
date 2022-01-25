@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { csv } from 'd3-request';
 import { nest } from 'd3-collection';
 import { useEffect, useState } from 'react';
-import { Oval } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 import { DataType, YearListDataType } from './Types';
 import { MapViz } from './MapViz';
 import { TimeSeriesViz } from './TimeSeriesViz';
@@ -233,6 +233,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const LoaderEl = styled.div`
+display: flex;
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+
+`;
+
 const App = () => {
   const [finalData, setFinalData] = useState<DataType[] | undefined>(undefined);
   const [years, setYears] = useState<YearListDataType[] | undefined>(undefined);
@@ -294,13 +303,13 @@ const App = () => {
             </>
           )
           : (
-            <>
-              <Oval
+            <LoaderEl>
+              <TailSpin
                 color='#0969FA'
-                height={50}
-                width={50}
+                height={75}
+                width={75}
               />
-            </>
+            </LoaderEl>
           )
       }
     </>

@@ -59,6 +59,10 @@ export const DumbellChartViz = (props: Props) => {
       label: 'Wealth Share Difference',
       key: 'diff',
     },
+    {
+      label: 'Wealth Share Ratio',
+      key: 'ratio',
+    },
   ];
   return (
     <El>

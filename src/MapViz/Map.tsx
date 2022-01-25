@@ -4,7 +4,7 @@ import { select } from 'd3-selection';
 import { geoEqualEarth } from 'd3-geo';
 import { zoom } from 'd3-zoom';
 import styled from 'styled-components';
-import world from './world.json';
+import world from './worldMap.json';
 import {
   TOP10WIDBINS, BOTTOM40WIDBINS, RATIOBINS, COLORSCALE, BOTTOM40KEY, TOP10KEY, RATIOKEY,
 } from '../Constants';
