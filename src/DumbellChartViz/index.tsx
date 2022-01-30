@@ -54,19 +54,19 @@ export const DumbellChartViz = (props: Props) => {
       key: 'country',
     },
     {
-      label: 'Wealth Share: Bottom 40%',
+      label: 'Income Share: Bottom 40%',
       key: 'bottom40WID',
     },
     {
-      label: 'Wealth Share: Top 10%',
+      label: 'Income Share: Top 10%',
       key: 'top10WID',
     },
     {
-      label: 'Wealth Share Difference',
+      label: 'Income Share Difference',
       key: 'diff',
     },
     {
-      label: 'Wealth Share Ratio',
+      label: 'Income Share Ratio',
       key: 'ratio',
     },
   ];
@@ -74,7 +74,7 @@ export const DumbellChartViz = (props: Props) => {
     <El>
       <Filters>
         <FlexDiv>
-          <TitleText>Difference in the Wealth Share for bottom 40% and top 10% for</TitleText>
+          <TitleText>Difference in the Income Share for bottom 40% and top 10% for</TitleText>
           <Select
             options={years}
             className='countrySelect'

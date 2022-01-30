@@ -86,7 +86,7 @@ export const Tooltip = (props: Props) => {
   const marginLeft = 20;
   const marginBottom = 10;
   const marginTop = 10;
-  const indicatorText = data.indicator === 'bottom40WID' ? 'Wealth Share of Bottom 40%' : data.indicator === 'top10WID' ? 'Wealth Share of Top 10%' : 'Ratio of Wealth Share of Bottom 40% to Top 10%';
+  const indicatorText = data.indicator === 'bottom40WID' ? 'Income Share of Bottom 40%' : data.indicator === 'top10WID' ? 'Income Share of Top 10%' : 'Ratio of Income Share of Bottom 40% to Top 10%';
   const max = data.data ? maxBy(data.data.data, data.indicator) as YearDataType : 1;
   const arraySize = data.data?.data.length;
   const yScale = scaleLinear().domain([0, max === 1 ? 1 : max[data.indicator]]).range([0, height]).nice();

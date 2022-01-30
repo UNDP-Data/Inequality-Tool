@@ -76,7 +76,7 @@ export const Tooltip = (props: Props) => {
       </TooltipHead>
       <TooltipBody>
         <div>
-          Wealth Share For
+          Income Share For
           {' '}
           <span className='bold'>{data.year}</span>
         </div>

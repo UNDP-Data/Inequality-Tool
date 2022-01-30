@@ -43,7 +43,7 @@ export const TimeSeriesViz = (props: Props) => {
     <El>
       <Filters>
         <FlexDiv>
-          <div>Wealth Share Change Over Time For</div>
+          <div>Income Share Change Over Time For</div>
           <Select
             options={countryList}
             className='countrySelect'

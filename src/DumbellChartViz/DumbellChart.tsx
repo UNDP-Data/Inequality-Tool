@@ -58,7 +58,7 @@ export const DumbellChart = (props: Props) => {
             color='#110848'
             fontWeight={700}
           >
-            Wealth Share Difference
+            Income Share Difference
           </text>
           <circle
             cx={leftPadding + 180}
@@ -99,7 +99,7 @@ export const DumbellChart = (props: Props) => {
           color='#110848'
           fontWeight={700}
         >
-          Wealth Share Ratio
+          Income Share Ratio
         </text>
         {
           sortedData.map((d, i) => (
