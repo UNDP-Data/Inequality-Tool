@@ -19,7 +19,7 @@ const TooltipEl = styled.div<TooltipElProps>`
   border-radius: 1rem;
   font-size: 1.4rem;
   background-color: var(--white);
-  box-shadow: 0 0 1rem rgb(0 0 0 / 15%);
+  box-shadow: var(--shadow);
   word-wrap: break-word;
   top: ${(props) => props.y - 40}px;
   left: ${(props) => props.x + 20}px;
@@ -27,15 +27,16 @@ const TooltipEl = styled.div<TooltipElProps>`
 `;
 
 const TooltipTitle = styled.div`
-  color: var(--navy);  
-  background: var(--yellow);
+  color: var(--white);  
+  background: var(--blue-medium);
   width: 100%;
   box-sizing: border-box;
   padding: 1rem;
   position: relative;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 2rem;
   line-height: 2.4rem;
+  border-radius: 1rem 1rem 0 0;
 `;
 
 const TooltipBody = styled.div`
@@ -54,12 +55,28 @@ const TooltipHead = styled.div`
 `;
 
 const TimelineEl = styled.div`
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `;
 
 const TimelineElTitle = styled.div`
   font-size: 1.4rem;
-  color: var(--grey-c3);
+  color: var(--black-700);
+  font-weight: bold;
+`;
+
+interface HighlightedProps {
+  isHighlighted: boolean;
+}
+
+const Span = styled.span<HighlightedProps>`
+  font-weight: ${(props) => (props.isHighlighted ? 'bold' : 'normal')};
+  font-style: ${(props) => (props.isHighlighted ? 'normal' : 'italic')};
+  color: ${(props) => (props.isHighlighted ? 'var(--primary-blue)' : 'var(--black-700)')};
+`;
+
+const SubNote = styled.div`
+  font-style: italic;
+  color: var(--black-550);
 `;
 
 export const Tooltip = (props: Props) => {
@@ -85,13 +102,19 @@ export const Tooltip = (props: Props) => {
         <div>
           {indicatorText}
           {' '}
-          for
-          {' '}
-          <span className='bold'>{data.year}</span>
+          {
+            data.data ? (
+              <span>
+                for
+                {' '}
+                <span className='bold'>{data.year}</span>
+              </span>
+            ) : null
+          }
           {' '}
           is
           {' '}
-          <span className={data.data ? 'bold' : 'italics'}>
+          <Span isHighlighted={!!data.data}>
             {
             data.data && data.data.data.findIndex((d) => d.year === data.year) !== -1
               ? data.indicator !== 'b40T10RatioWID'
@@ -99,7 +122,7 @@ export const Tooltip = (props: Props) => {
                 : data.data.data[data.data.data.findIndex((d) => d.year === data.year)][data.indicator].toFixed(2)
               : 'Not Available'
           }
-          </span>
+          </Span>
         </div>
         {
           data.data && arraySize
@@ -142,13 +165,21 @@ export const Tooltip = (props: Props) => {
                         height={yScale(el[data.indicator])}
                         x={(i * (graphWidth / arraySize)) + 1 + marginLeft}
                         y={height - yScale(el[data.indicator]) + marginTop}
-                        fill={el.year === data.year ? '#212121' : '#DDD'}
+                        fill={el.year === data.year ? '#0969FA' : '#DDD'}
                       />
                     ))
                   }
                   </g>
                 </svg>
               </TimelineEl>
+            ) : null
+        }
+        {
+          data.data && arraySize
+            ? (
+              <SubNote>
+                Click to see more details
+              </SubNote>
             ) : null
         }
       </TooltipBody>

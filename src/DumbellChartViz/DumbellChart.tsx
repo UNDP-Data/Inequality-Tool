@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import sortBy from 'lodash.sortby';
 import maxBy from 'lodash.maxby';
 import { scaleLinear } from 'd3-scale';
@@ -9,31 +8,6 @@ interface Props {
   year: number;
   sortedBy: string;
 }
-
-const LegendContainerEl = styled.div`
-  display: flex;
-  margin: 2rem 0 0 0;
-`;
-
-const LegendEl = styled.div`
-  display: flex;
-  margin-right: 2rem;
-  align-items: center;
-  font-size: 1.6rem;
-  color: var(--navy);
-`;
-
-interface LegendColorProps {
-  color: string;
-}
-
-const LegendColor = styled.div<LegendColorProps>`
-  background-color: ${(props) => props.color};
-  width: 1rem;
-  height: 1rem;
-  border-radius: 1rem;
-  margin-right: 0.5rem;
-`;
 
 export const DumbellChart = (props: Props) => {
   const { data, year, sortedBy } = props;
@@ -64,16 +38,6 @@ export const DumbellChart = (props: Props) => {
   const widthScale = scaleLinear().domain([0, maxRatio?.ratio as number]).range([0, rightPadding - 30]).nice();
   return (
     <>
-      <LegendContainerEl>
-        <LegendEl>
-          <LegendColor color='#E26B8D' />
-          <div>Bottom 40%</div>
-        </LegendEl>
-        <LegendEl>
-          <LegendColor color='#266291' />
-          <div>Top 10%</div>
-        </LegendEl>
-      </LegendContainerEl>
       <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth} ${(arrayLength * rowHeight) + marginTop}`}>
         <text
           x={0}

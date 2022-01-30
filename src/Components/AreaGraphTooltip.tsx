@@ -17,7 +17,7 @@ const TooltipEl = styled.div<TooltipElProps>`
   border-radius: 1rem;
   font-size: 1.4rem;
   background-color: var(--white);
-  box-shadow: 0 0 1rem rgb(0 0 0 / 15%);
+  box-shadow: var(--shadow);
   word-wrap: break-word;
   top: ${(props) => props.y - 40}px;
   left: ${(props) => props.x + 20}px;

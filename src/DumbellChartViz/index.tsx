@@ -23,13 +23,19 @@ const Filters = styled.div`
 const FlexDiv = styled.div`
   display: flex;
   align-items: center;
-  font-size: 2.4rem;
+  font-size: 2rem;
   flex-wrap: wrap;
+  color: var(--black-600);
 `;
 
 const IconEl = styled.div`
   height: 2.4rem;
-  margin-left: -1.3rem;
+  margin-left: -1.8rem;
+  margin-top: -2px;
+  margin-right: 0.5rem;
+`;
+
+const TitleText = styled.div`
   margin-right: 1rem;
 `;
 
@@ -68,7 +74,7 @@ export const DumbellChartViz = (props: Props) => {
     <El>
       <Filters>
         <FlexDiv>
-          <div>Difference in the Wealth Share for bottom 40% and top 10% for</div>
+          <TitleText>Difference in the Wealth Share for bottom 40% and top 10% for</TitleText>
           <Select
             options={years}
             className='countrySelect'
@@ -77,13 +83,13 @@ export const DumbellChartViz = (props: Props) => {
             labelField='label'
             valueField='label'
             dropdownHeight='250px'
-            dropdownPosition='auto'
+            dropdownPosition='bottom'
             dropdownGap={2}
           />
           <IconEl>
-            <CaretDown size={24} color='#110848' />
+            <CaretDown size={24} color='#018EFF' />
           </IconEl>
-          <div>sorted by</div>
+          <TitleText>sorted by</TitleText>
           <Select
             options={sortingOptions}
             className='countrySelect'
@@ -92,11 +98,11 @@ export const DumbellChartViz = (props: Props) => {
             labelField='label'
             valueField='label'
             dropdownHeight='250px'
-            dropdownPosition='auto'
+            dropdownPosition='bottom'
             dropdownGap={2}
           />
           <IconEl>
-            <CaretDown size={24} color='#110848' />
+            <CaretDown size={24} color='#018EFF' />
           </IconEl>
         </FlexDiv>
       </Filters>

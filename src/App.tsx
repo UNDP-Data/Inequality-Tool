@@ -5,24 +5,29 @@ import { useEffect, useState } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import { DataType, YearListDataType } from './Types';
 import { MapViz } from './MapViz';
-import { TimeSeriesViz } from './TimeSeriesViz';
 import { DumbellChartViz } from './DumbellChartViz';
 
 const GlobalStyle = createGlobalStyle`
   :root {
+    --white: #FFFFFF;
     --primary-blue: #0969FA;
-    --white: #ffffff;
-    --light-gray:#FAFAFA;
-    --bg-blue:  #E7F1FF;
-    --text-color:#110848;
-    --black: #111;
-    --navy: #110848;
-    --medium-grey: #CCCCCC;
-    --grey: #919399;
-    --grey-c3: #B5BFCC;
-    --dark-grey: #383838;
-    --dropdown-bg: #E9ECF6;
+    --blue-medium: #018EFF;
+    --navy: #082753;
+    --black-100: #FAFAFA;
+    --black-200: #f5f9fe;
+    --black-300: #EDEFF0;
+    --black-400: #E9ECF6;
+    --black-500: #A9B1B7;
+    --black-550: #666666;
+    --black-600: #212121;
+    --black-700: #000000;
+    --blue-very-light: #F2F7FF;
     --yellow: #E9CE2C;
+    --shadow:0px 10px 30px -10px rgb(9 105 250 / 15%);
+    --shadow-bottom: 0 10px 13px -3px rgb(9 105 250 / 5%);
+    --shadow-top: 0 -10px 13px -3px rgb(9 105 250 / 15%);
+    --shadow-right: 10px 0px 13px -3px rgb(9 105 250 / 5%);
+    --shadow-left: -10px 0px 13px -3px rgb(9 105 250 / 15%);
   }
   
   html { 
@@ -36,7 +41,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0 2rem;
     font-size: 1.6rem;
-    font-weight: 500;
     line-height: 2.56rem;
     max-width: 128rem;
     margin: auto;
@@ -102,134 +106,75 @@ const GlobalStyle = createGlobalStyle`
     font-style: italic;
   }
 
-  .yearSelect {
-    border: 0 !important;
-    width: 15rem !important;
-    border-radius: 3rem !important;
-    background-color: var(--dropdown-bg);
-    margin-left: 1rem;
-    color: var(--black);
-    .react-dropdown-select-type-multi{
-      padding: 0 !important;
-    }
-
-    .react-dropdown-select-content {
-      height: auto !important;
-      margin-left: 1rem;
-    }
-
-    .react-dropdown-select-option{
-      border-radius: 3rem !important;
-      background-color: var(--navy) !important;
-      color: var(--white) !important;
-      &:nth-of-type(n + 3) {
-        display: inline !important;
-      }
-      &:first-of-type{
-        margin-left: 0 !important;
-      }
-    }
-  }
-
   .countrySelect {
     border: 0 !important;
     font-weight: bold;
     background-color: transparent !important;
-    text-decoration: underline;
-    color: var(--navy) !important;
-    margin-left: 0.7rem;
-    padding-right: 1rem !important;
+    color: var(--blue-medium) !important;
+    margin-left: 0;
+    padding-right: 1.9rem !important;
+    padding-left: 0 !important;
+    &:hover {
+      box-shadow: var(--shadow) !important;
+    }
+    &:focus-within {
+      box-shadow: none !important;
+    }
     .react-dropdown-select-type-multi{
       padding: 0 !important;
     }
 
     .react-dropdown-select-content {
       height: auto !important;
-    }
-
-    .react-dropdown-select-option{
-      background-color: var(--navy) !important;
-      color: var(--white) !important;
-      &:nth-of-type(n + 3) {
-        display: inline !important;
-      }
-      &:first-of-type{
-        margin-left: 0 !important;
-      }
     }
 
     .react-dropdown-select-dropdown-handle {
       display: none !important;
       width: 0 !important;
       margin: 0 !important;
-      margin-top: 0.6rem !important;
     }
+    .react-dropdown-select-dropdown{
+      font-size: 1.6rem !important;
+      color: var(--black-550) !important;
+      box-shadow: var(--shadow) !important;
+      border: 0 !important;
+      min-width: 24rem !important;
+    }
+    .react-dropdown-select-item:hover, .react-dropdown-select-item:hover:focus{
+      background-color: var(--blue-very-light) !important;
+      color: var(--blue-medium) !important;
+    }
+
+    .react-dropdown-select-item-selected {
+      background-color: var(--blue-very-light) !important;
+      color: var(--blue-medium) !important;
+    }
+
+    .react-dropdown-select-input {
+      display: none;
+    }
+    
   }
 
-  .dropdownMain:hover, .dropdownMain:focus {
-    border: 2px solid #919399 !important;
-  }
-
-  .react-dropdown-select-dropdown-handle svg  {
-    margin: -4px 0 -4px 8px !important; 
-    padding-top: -2px !important;
-    fill: var(--mavy) !important;
-  }
-
-
-  .react-dropdown-select-dropdown{
-    font-size: 1.2rem !important;
-    box-shadow: 0px 10px 20px 0px rgb(9 105 250 / 15%) !important;
-    border: 0 !important;
-  }
-
-  .react-dropdown-select-item:hover, .react-dropdown-select-item:hover:focus{
-    background-color: var(--bg-blue) !important;
-  }
-
-  .react-dropdown-select-item-selected {
-    background-color: var(--navy) !important;
-  }
-
-  
   .horizontal-slider {
     width: 100%;
     margin: auto;
     margin-top: -1.1rem;
   }
 
-  .year-slider-thumb {
-    cursor: pointer;
-    position: absolute;
-    z-index: 100;
-    background: #ffffff;
-    border: 5px solid var(--primary-blue);
-    border-radius: 100%;
-    display: block;
-    box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
-  }
-
   .year-slider-track {
     position: relative;
-    background: #ddd;
+    background: var(--black-400);
   }
 
   .year-slider-track.year-slider-track-0 {
-    background: var(--primary-blue);
+    background: var(--blue-medium);
   }
 
   .horizontal-slider .year-slider-track {
-    top: 2.1rem;
-    height: 0.7rem;
+    top: 2.2rem;
+    height: 0.5rem;
     border-radius: 1rem;
-  }
-
-  .horizontal-slider .year-slider-thumb {
-    top: 1.5rem;
-    width: 1rem;
-    outline: none;
-    height: 1rem;
-    line-height: 3.8rem;
   }
 `;
 
@@ -292,9 +237,6 @@ const App = () => {
               <MapViz
                 data={finalData}
                 years={years}
-              />
-              <TimeSeriesViz
-                data={finalData}
               />
               <DumbellChartViz
                 data={finalData}
