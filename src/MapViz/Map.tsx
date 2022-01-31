@@ -182,8 +182,9 @@ export const Map = (props: Props) => {
               <rect
                 x={0}
                 y={0}
-                width={mapWidth}
-                height={mapHeight}
+                width={mapWidth * (height / mapHeight)}
+                height={mapHeight * (width / mapWidth)}
+                transform={`translate(${((mapWidth * (height / mapHeight)) - width) / 2},${((mapHeight * (width / mapWidth)) - height) / 2})`}
                 fill='#fff'
                 fillOpacity={0}
                 onClick={() => {
