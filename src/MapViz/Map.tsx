@@ -94,8 +94,6 @@ interface SelectedProps{
 }
 
 const RadioEl = styled.div`
-  width: 0.8rem;
-  height: 0.8rem;
   border: 2px solid var(--black-550);
   border-radius: 2rem;
   background-color: transparent;
@@ -120,9 +118,9 @@ const TitleEl = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: transparent;
-  border: 0;
-  padding: 0;
+  background-color: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
 `;
 
 export const Map = (props: Props) => {
@@ -144,6 +142,7 @@ export const Map = (props: Props) => {
   const height = 730;
   const map: any = world;
   const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 410]);
+  const GraphRef = useRef(null);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);
   const colorScale = scaleThreshold<number, string>().domain(indicator === 'top10WID' ? TOP10WIDBINS : indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(COLORSCALE);
@@ -164,7 +163,7 @@ export const Map = (props: Props) => {
 
   useEffect(() => {
     setColorSettingVisible((mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false));
-  }, [mapWidth, mapHeight]);
+  }, [mapWidth, mapHeight, GraphRef]);
 
   return (
     <RootEl>
@@ -178,14 +177,14 @@ export const Map = (props: Props) => {
             country={country}
             ISO3={ISO3}
           />
-          <div id='graph-node'>
+          <div id='graph-node' ref={GraphRef}>
             <svg width={mapWidth} height={mapHeight} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
               <g ref={mapG}>
                 <rect
                   x={0}
                   y={0}
-                  width={width}
-                  height={height}
+                  width={mapWidth}
+                  height={mapHeight}
                   fill='#fff'
                   fillOpacity={0}
                   onClick={() => {
