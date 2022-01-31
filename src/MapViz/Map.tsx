@@ -179,19 +179,19 @@ export const Map = (props: Props) => {
           />
           <div id='graph-node' ref={GraphRef}>
             <svg width={mapWidth} height={mapHeight} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
+              <rect
+                x={0}
+                y={0}
+                width={mapWidth}
+                height={mapHeight}
+                fill='#fff'
+                fillOpacity={0}
+                onClick={() => {
+                  setCountry('World');
+                  setISO3('');
+                }}
+              />
               <g ref={mapG}>
-                <rect
-                  x={0}
-                  y={0}
-                  width={mapWidth}
-                  height={mapHeight}
-                  fill='#fff'
-                  fillOpacity={0}
-                  onClick={() => {
-                    setCountry('World');
-                    setISO3('');
-                  }}
-                />
                 {
                   map.features.map((d: any, i: any) => {
                     if (d.properties.NAME === 'Antarctica') return null;
