@@ -39,17 +39,17 @@ export const CountrySideBar = (props: Props) => {
     <>
       <CardsContainerEl>
         <SideBarCard
-          title='Total Income Share: Bottom 40% '
+          title='Income Share: Bottom 40% '
           titleSubNote={`(for  ${year})`}
           value={yearData ? `${(yearData.bottom40WID * 100).toFixed(1)}%` : 'NA'}
         />
         <SideBarCard
-          title='Total Income Share: Top 10% '
+          title='Income Share: Top 10% '
           titleSubNote={`(for  ${year})`}
           value={yearData ? `${(yearData.top10WID * 100).toFixed(1)}%` : 'NA'}
         />
         <SideBarCard
-          title='Total Income Share Ratio '
+          title='Income Share Ratio '
           titleSubNote={`Bottom 40% / Top 10% (for  ${year})`}
           value={yearData ? `${(yearData.b40T10RatioWID).toFixed(3)}` : 'NA'}
         />

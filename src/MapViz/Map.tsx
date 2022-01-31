@@ -143,7 +143,7 @@ export const Map = (props: Props) => {
   const width = 960;
   const height = 730;
   const map: any = world;
-  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 440]);
+  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 410]);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);
   const colorScale = scaleThreshold<number, string>().domain(indicator === 'top10WID' ? TOP10WIDBINS : indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(COLORSCALE);
@@ -162,6 +162,10 @@ export const Map = (props: Props) => {
     mapSvgSelect.call(zoomBehaviour as any);
   }, [height, width, mapG, mapSvg]);
 
+  useEffect(() => {
+    setColorSettingVisible((mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false));
+  }, [mapWidth, mapHeight]);
+
   return (
     <RootEl>
       {
@@ -176,19 +180,19 @@ export const Map = (props: Props) => {
           />
           <div id='graph-node'>
             <svg width={mapWidth} height={mapHeight} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
-              <rect
-                x={0}
-                y={0}
-                width={width}
-                height={height}
-                fill='#fff'
-                fillOpacity={0}
-                onClick={() => {
-                  setCountry('World');
-                  setISO3('');
-                }}
-              />
               <g ref={mapG}>
+                <rect
+                  x={0}
+                  y={0}
+                  width={width}
+                  height={height}
+                  fill='#fff'
+                  fillOpacity={0}
+                  onClick={() => {
+                    setCountry('World');
+                    setISO3('');
+                  }}
+                />
                 {
                   map.features.map((d: any, i: any) => {
                     if (d.properties.NAME === 'Antarctica') return null;
@@ -306,7 +310,7 @@ export const Map = (props: Props) => {
                           <RadioIcon selected={indicator === 'b40T10RatioWID'} />
                           {' '}
                         </RadioEl>
-                        <>Income Share Ratio: B. 40% / T. 10%</>
+                        <>Income Share Ratio: Bottom 40% / Top 10%</>
                       </OptionEl>
                       <OptionEl onClick={() => { setIndicator('bottom40WID'); }}>
                         <RadioEl>

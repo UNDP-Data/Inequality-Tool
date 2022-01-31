@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import styled from 'styled-components';
 import meanBy from 'lodash.meanby';
 import { getValue } from '../Utils/getValue';
@@ -55,25 +54,20 @@ export const MapBanner = (props: Props) => {
 
   const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === year) !== -1);
   const mean = meanBy(filteredData, (d) => 1 / d.data[d.data.findIndex((el) => el.year === year)].b40T10RatioWID);
-  const meanDiff = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].top10WID - d.data[d.data.findIndex((el) => el.year === year)].bottom40WID);
   return (
     <>
       {
         country === 'World'
           ? (
             <BannerEl>
-              In the
-              {' '}
-              <Span className='bold'>{country}</Span>
-              {' '}
-              for the year
+              In
               {' '}
               <Span className='bold'>{year}</Span>
               , on average (based on data available for
               {' '}
               {filteredData.length}
               {' '}
-              countries), total income of the top 10% was
+              countries), income share of the top 10% was
               {' '}
               <Span className='bold'>
                 {mean.toFixed(2)}
@@ -81,12 +75,7 @@ export const MapBanner = (props: Props) => {
                 times
               </Span>
               {' '}
-              of bottom 40%. The average difference between the total income share of top 10% and bottom 40% is
-              {' '}
-              <Span className='bold'>
-                {(meanDiff * 100).toFixed(2)}
-                %
-              </Span>
+              of bottom 40%.
             </BannerEl>
           )
           : getValue(ISO3, year, indicator, data) === -1
@@ -106,12 +95,12 @@ export const MapBanner = (props: Props) => {
               <BannerEl>
                 In
                 {' '}
+                <Span className='bold'>{year}</Span>
+                , income share of the top 10% in
+                {' '}
                 <Span className='bold'>{country}</Span>
                 {' '}
-                for the year
-                {' '}
-                <Span className='bold'>{year}</Span>
-                , total income of the top 10% was
+                was
                 {' '}
                 <Span className='bold'>
                   {(1 / getValue(ISO3, year, 'b40T10RatioWID', data)).toFixed(2)}
@@ -119,12 +108,7 @@ export const MapBanner = (props: Props) => {
                   times
                 </Span>
                 {' '}
-                of bottom 40%. The difference between the total income share of top 10% and bottom 40% is
-                {' '}
-                <Span className='bold'>
-                  {((getValue(ISO3, year, 'top10WID', data) - getValue(ISO3, year, 'bottom40WID', data)) * 100).toFixed(2)}
-                  %
-                </Span>
+                of bottom 40%
               </BannerEl>
             )
       }
