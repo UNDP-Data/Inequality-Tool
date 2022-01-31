@@ -159,7 +159,7 @@ export const Map = (props: Props) => {
       });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mapSvgSelect.call(zoomBehaviour as any);
-  }, [height, width, mapG, mapSvg]);
+  }, [height, width, mapG, mapSvg, mapWidth, mapHeight]);
 
   useEffect(() => {
     setColorSettingVisible((mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false));
