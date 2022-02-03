@@ -11,7 +11,6 @@ import {
 import { DataType, HoverDataType } from '../Types';
 import { getValue } from '../Utils/getValue';
 import { Tooltip } from '../Components/Tooltip';
-import { MapBanner } from './MapBanner';
 import { ArrowDown, ArrowUp } from '../icons';
 
 interface Props {
@@ -123,6 +122,17 @@ const Button = styled.button`
   padding: 0 !important;
 `;
 
+const ColorHelpEl = styled.div`
+  color: var(--black-700);
+  font-weight: bold;
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  line-height: 1rem;
+`;
+
 export const Map = (props: Props) => {
   const {
     year,
@@ -139,9 +149,9 @@ export const Map = (props: Props) => {
   const [colorSettingVisible, setColorSettingVisible] = useState(mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false);
   const [indicator, setIndicator] = useState<'bottom40WID' | 'top10WID' | 'b40T10RatioWID'>('b40T10RatioWID');
   const width = 960;
-  const height = 730;
+  const height = 620;
   const map: any = world;
-  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 410]);
+  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 310]);
   const GraphRef = useRef(null);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);
@@ -170,13 +180,6 @@ export const Map = (props: Props) => {
       {
       mapWidth && mapHeight ? (
         <>
-          <MapBanner
-            year={year}
-            data={data}
-            indicator={indicator}
-            country={country}
-            ISO3={ISO3}
-          />
           <div id='graph-node' ref={GraphRef}>
             <svg width={mapWidth} height={mapHeight} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
               <rect
@@ -291,7 +294,7 @@ export const Map = (props: Props) => {
                 }
               </g>
             </svg>
-            <ColorScaleEl marginTop={colorSettingVisible ? '-18rem' : '-10.32rem'}>
+            <ColorScaleEl marginTop={colorSettingVisible ? '-21rem' : '-13.32rem'}>
               <TitleEl>
                 <div>Color Settings</div>
                 <Button type='button' onClick={() => { setColorSettingVisible(!colorSettingVisible); }}>
@@ -332,6 +335,18 @@ export const Map = (props: Props) => {
                   )
                   : null
               }
+              <ColorHelpEl>
+                <div>
+                  ←
+                  {' '}
+                  {indicator === 'top10WID' ? 'Low is Better' : 'Low is Worse'}
+                </div>
+                <div>
+                  {indicator === 'top10WID' ? 'High is Worse' : 'High is Better'}
+                  {' '}
+                  →
+                </div>
+              </ColorHelpEl>
               <FlexDiv>
                 {
                   array.map((d, i) => (
@@ -357,14 +372,14 @@ export const Map = (props: Props) => {
             </ColorScaleEl>
           </div>
           {
-        hoverData
-          ? (
-            <Tooltip
-              data={hoverData}
-            />
-          )
-          : null
-      }
+            hoverData
+              ? (
+                <Tooltip
+                  data={hoverData}
+                />
+              )
+              : null
+          }
         </>
       ) : null
 }

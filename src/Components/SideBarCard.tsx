@@ -4,6 +4,7 @@ interface Props {
     title: string;
     titleSubNote?: string;
     value: string;
+    valueSubNote?: string;
 }
 
 const CardEl = styled.div`
@@ -37,6 +38,7 @@ const CardBodyEl = styled.div`
   padding: 1.5rem 0;
   font-weight: bold;
   text-transform: uppercase;
+  line-height: 2rem;
   text-align: center;
   color: var(--primary-blue);
   background-color: var(--white);
@@ -49,8 +51,16 @@ const SubNote = styled.span`
   font-style: italic;
   color: var(--black-550);
   @media (max-width: 960px) {
-  font-size: 1rem;
+    font-size: 1rem;
   }
+`;
+
+const ValueSubNoteSpan = styled.span`
+  font-size: 1.4rem;
+  font-style: italic;
+  text-transform: none;
+  font-weight: normal;
+  color: var(--black-700);
 `;
 
 export const SideBarCard = (props: Props) => {
@@ -58,6 +68,7 @@ export const SideBarCard = (props: Props) => {
     title,
     titleSubNote,
     value,
+    valueSubNote,
   } = props;
 
   return (
@@ -66,12 +77,13 @@ export const SideBarCard = (props: Props) => {
         {title}
         {' '}
         <SubNote>
-          <br />
           {titleSubNote}
         </SubNote>
       </CardTitleEl>
       <CardBodyEl>
         {value}
+        <br />
+        {valueSubNote ? <ValueSubNoteSpan>{valueSubNote}</ValueSubNoteSpan> : null}
       </CardBodyEl>
     </CardEl>
   );

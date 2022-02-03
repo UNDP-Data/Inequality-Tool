@@ -39,6 +39,15 @@ const TitleText = styled.div`
   margin-right: 1rem;
 `;
 
+const DumbellChartEl = styled.div`
+  height: 60rem;
+  background-color: var(--black-100);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  border-radius: 2px;
+  overflow: auto;
+`;
+
 export const DumbellChartViz = (props: Props) => {
   const { data, years } = props;
   const [year, setYear] = useState(years[years.length - 1].label);
@@ -106,11 +115,13 @@ export const DumbellChartViz = (props: Props) => {
           </IconEl>
         </FlexDiv>
       </Filters>
-      <DumbellChart
-        data={data}
-        year={year}
-        sortedBy={sortedBy.key}
-      />
+      <DumbellChartEl>
+        <DumbellChart
+          data={data}
+          year={year}
+          sortedBy={sortedBy.key}
+        />
+      </DumbellChartEl>
     </El>
   );
 };

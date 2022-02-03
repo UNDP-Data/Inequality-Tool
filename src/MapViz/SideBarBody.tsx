@@ -32,7 +32,7 @@ export const SideBarBody = (props: Props) => {
         country === 'World'
           ? <WorldSideBar year={year} data={data} />
           : data.findIndex((d) => d.ISOAlpha3 === ISO3) !== -1
-            ? <CountrySideBar year={year} data={data[data.findIndex((d) => d.ISOAlpha3 === ISO3)]} />
+            ? <CountrySideBar year={year} data={data} iso3={ISO3} />
             : (
               <>
                 Data for

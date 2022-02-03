@@ -17,7 +17,7 @@ interface Props {
 const MapEl = styled.div`
   width: 75%;
   background-color: var(--blue-very-light);
-  max-height: 73rem;
+  max-height: 62rem;
   @media (max-width: 960px) {
     width: 100%;
     height: calc(730 * (100vw - 40px) / 960);
@@ -108,8 +108,9 @@ const SideBarEl = styled.div`
   background-color: var(--white);
   box-shadow: var(--shadow-right);
   z-index: 5;
+  padding-top: 1rem;
   position: relative;
-  height: 73rem;
+  height: 61rem;
   overflow: auto;
 
   ::-webkit-scrollbar {
@@ -138,27 +139,20 @@ const SideBarEl = styled.div`
   }
 `;
 
-const SideBardHeadingText = styled.div`
+const HeaderTextEl = styled.div`
   margin-right: 1rem;
   color: var(--black-600);
 `;
 
-const SideBarHeadingSelections = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const SideBarHeader = styled.div`
+const HeaderEl = styled.div`
   background-color: var(--white);
   padding:1.5rem 1rem 1rem 1rem;
-  margin-bottom: 1.5rem;
   box-shadow: var(--shadow-bottom);
   border-bottom: 1px solid var(--black-400);
-  @media (max-width: 960px) {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-  }
+  font-size: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
 `;
 
 const AreaGraphContainer = styled.div`
@@ -169,6 +163,10 @@ const AreaGraphContainer = styled.div`
     background-color: var(--blue-very-light);
     border-top: 1px solid var(--black);
   }
+`;
+
+const RootEl = styled.div`
+  box-shadow: var(--shadow);
 `;
 
 export const MapViz = (props: Props) => {
@@ -205,61 +203,59 @@ export const MapViz = (props: Props) => {
   }, [mapRef]);
 
   return (
-    <>
+    <RootEl>
+      <HeaderEl>
+        <HeaderTextEl>
+          Income Shares for
+          {country === 'World' ? ' the' : null}
+        </HeaderTextEl>
+        <FlexDiv>
+          <Select
+            options={countryList}
+            className='countrySelect'
+            onChange={(el: any) => { setCountry(el[0].label); setISO3(el[0].ISOCode); }}
+            values={
+                [
+                  {
+                    label: country,
+                    ISOCode: ISO3,
+                  },
+                ]
+              }
+            labelField='label'
+            valueField='label'
+            dropdownHeight='250px'
+            dropdownPosition='auto'
+            searchable={false}
+            dropdownGap={2}
+          />
+          <CaretIconEl>
+            <CaretDown size={24} color='#018EFF' />
+          </CaretIconEl>
+        </FlexDiv>
+        <HeaderTextEl>
+          in
+        </HeaderTextEl>
+        <FlexDiv>
+          <Select
+            options={years}
+            className='countrySelect'
+            onChange={(el: any) => { setSelectedYear(el[0].label); setPlay(false); }}
+            values={[{ label: selectedYear }]}
+            labelField='label'
+            valueField='label'
+            dropdownHeight='250px'
+            dropdownPosition='auto'
+            searchable={false}
+            dropdownGap={2}
+          />
+          <CaretIconEl>
+            <CaretDown size={24} color='#018EFF' />
+          </CaretIconEl>
+        </FlexDiv>
+      </HeaderEl>
       <VizContainer>
         <SideBarEl>
-          <SideBarHeader>
-            <SideBardHeadingText>
-              Income Shares for
-              {country === 'World' ? ' the' : null}
-            </SideBardHeadingText>
-            <SideBarHeadingSelections>
-              <FlexDiv>
-                <Select
-                  options={countryList}
-                  className='countrySelect'
-                  onChange={(el: any) => { setCountry(el[0].label); setISO3(el[0].ISOCode); }}
-                  values={
-                  [
-                    {
-                      label: country,
-                      ISOCode: ISO3,
-                    },
-                  ]
-                }
-                  labelField='label'
-                  valueField='label'
-                  dropdownHeight='250px'
-                  dropdownPosition='auto'
-                  searchable={false}
-                  dropdownGap={2}
-                />
-                <CaretIconEl>
-                  <CaretDown size={24} color='#018EFF' />
-                </CaretIconEl>
-              </FlexDiv>
-              <FlexDiv>
-                <SideBardHeadingText>
-                  in
-                </SideBardHeadingText>
-                <Select
-                  options={years}
-                  className='countrySelect'
-                  onChange={(el: any) => { setSelectedYear(el[0].label); setPlay(false); }}
-                  values={[{ label: selectedYear }]}
-                  labelField='label'
-                  valueField='label'
-                  dropdownHeight='250px'
-                  dropdownPosition='auto'
-                  searchable={false}
-                  dropdownGap={2}
-                />
-                <CaretIconEl>
-                  <CaretDown size={24} color='#018EFF' />
-                </CaretIconEl>
-              </FlexDiv>
-            </SideBarHeadingSelections>
-          </SideBarHeader>
           <SideBarBody
             country={country}
             year={selectedYear}
@@ -311,6 +307,6 @@ export const MapViz = (props: Props) => {
         />
         <YearsEl>{years[years.length - 1].label}</YearsEl>
       </TimeSliderUnitEl>
-    </>
+    </RootEl>
   );
 };
