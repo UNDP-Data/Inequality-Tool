@@ -35,7 +35,7 @@ const CardTitleEl = styled.div`
 
 const CardBodyEl = styled.div`
   font-size: 1.4rem;
-  line-height: 2.6rem;
+  line-height: 3.5rem;
   padding: 1.5rem 0;
   color: var(--black);
   background-color: var(--white);
@@ -44,7 +44,7 @@ const CardBodyEl = styled.div`
 const RowEl = styled.span`
   display: flex;
   justify-content: space-between;
-  padding: 0 0.5rem;
+  padding: 0 1rem;
 `;
 
 export const SideBarCardTable = (props: Props) => {

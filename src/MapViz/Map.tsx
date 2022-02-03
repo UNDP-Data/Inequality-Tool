@@ -149,9 +149,9 @@ export const Map = (props: Props) => {
   const [colorSettingVisible, setColorSettingVisible] = useState(mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false);
   const [indicator, setIndicator] = useState<'bottom40WID' | 'top10WID' | 'b40T10RatioWID'>('b40T10RatioWID');
   const width = 960;
-  const height = 620;
+  const height = 650;
   const map: any = world;
-  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 310]);
+  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 350]);
   const GraphRef = useRef(null);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);

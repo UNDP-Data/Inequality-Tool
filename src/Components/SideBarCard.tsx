@@ -4,13 +4,14 @@ interface Props {
     title: string;
     titleSubNote?: string;
     value: string;
-    valueSubNote?: string;
+    // eslint-disable-next-line no-undef
+    valueSubNote?: JSX.Element;
 }
 
 const CardEl = styled.div`
   border-radius: 5px;
   box-shadow: var(--shadow);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   @media (max-width: 960px) {
     width: calc(33.33% - 1rem);
   }
@@ -35,10 +36,10 @@ const CardTitleEl = styled.div`
 
 const CardBodyEl = styled.div`
   font-size: 2.8rem;
-  padding: 1.5rem 0;
+  padding: 1.5rem 1rem 1rem 1rem;
   font-weight: bold;
   text-transform: uppercase;
-  line-height: 2rem;
+  line-height: 2.4rem;
   text-align: center;
   color: var(--primary-blue);
   background-color: var(--white);
@@ -55,12 +56,13 @@ const SubNote = styled.span`
   }
 `;
 
-const ValueSubNoteSpan = styled.span`
+const ValueSubNoteSpan = styled.div`
   font-size: 1.4rem;
-  font-style: italic;
+  line-height: 1.6rem;
   text-transform: none;
   font-weight: normal;
-  color: var(--black-700);
+  color: var(--black-550);
+  margin-top: 1rem;
 `;
 
 export const SideBarCard = (props: Props) => {
@@ -76,13 +78,13 @@ export const SideBarCard = (props: Props) => {
       <CardTitleEl>
         {title}
         {' '}
+        <br />
         <SubNote>
           {titleSubNote}
         </SubNote>
       </CardTitleEl>
       <CardBodyEl>
         {value}
-        <br />
         {valueSubNote ? <ValueSubNoteSpan>{valueSubNote}</ValueSubNoteSpan> : null}
       </CardBodyEl>
     </CardEl>

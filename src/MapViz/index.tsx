@@ -17,7 +17,7 @@ interface Props {
 const MapEl = styled.div`
   width: 75%;
   background-color: var(--blue-very-light);
-  max-height: 62rem;
+  max-height: 64rem;
   @media (max-width: 960px) {
     width: 100%;
     height: calc(730 * (100vw - 40px) / 960);
@@ -110,7 +110,7 @@ const SideBarEl = styled.div`
   z-index: 5;
   padding-top: 1rem;
   position: relative;
-  height: 61rem;
+  height: 64rem;
   overflow: auto;
 
   ::-webkit-scrollbar {

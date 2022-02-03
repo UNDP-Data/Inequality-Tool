@@ -50,18 +50,69 @@ export const CountrySideBar = (props: Props) => {
         <SideBarCard
           title='Income Share: Bottom 40% '
           value={yearData ? `${(yearData.bottom40WID * 100).toFixed(1)}%` : 'NA'}
-          valueSubNote={sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : `${sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) + 1 === 1 ? 'Lowest' : `${sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) + 1} Lowest`} out of ${filteredData.length} countries`}
+          valueSubNote={sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+            <>
+              <span className='bold' style={{ color: 'var(--black-700)' }}>
+                {(filteredData.length - (sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {' '}
+                countries
+              </span>
+              {' '}
+              have lower income share for b. 40% (data available for
+              {' '}
+              <span className='bold'>
+                {filteredData.length}
+                {' '}
+                countries
+              </span>
+              )
+            </>
+          )}
         />
         <SideBarCard
           title='Income Share: Top 10% '
           value={yearData ? `${(yearData.top10WID * 100).toFixed(1)}%` : 'NA'}
-          valueSubNote={sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : `${sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) + 1 === 1 ? 'Highest' : `${sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) + 1} Highest`} out of ${filteredData.length} countries`}
+          valueSubNote={sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+            <>
+              <span className='bold' style={{ color: 'var(--black-700)' }}>
+                {(filteredData.length - (sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {' '}
+                countries
+              </span>
+              {' '}
+              have higher income share for t. 10% (data available for
+              {' '}
+              <span className='bold'>
+                {filteredData.length}
+                {' '}
+                countries
+              </span>
+              )
+            </>
+          )}
         />
         <SideBarCard
           title='Income Share Ratio '
           titleSubNote='Bottom 40% / Top 10%'
           value={yearData ? `${(yearData.b40T10RatioWID).toFixed(3)}` : 'NA'}
-          valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : `${sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) + 1 === 1 ? 'Lowest' : `${sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) + 1} Lowest`} out of ${filteredData.length} countries`}
+          valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+            <>
+              <span className='bold' style={{ color: 'var(--black-700)' }}>
+                {(filteredData.length - (sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {' '}
+                countries
+              </span>
+              {' '}
+              have lower income share ratio (data available for
+              {' '}
+              <span className='bold'>
+                {filteredData.length}
+                {' '}
+                countries
+              </span>
+              )
+            </>
+          )}
         />
       </CardsContainerEl>
       <AreaGraphEl>
