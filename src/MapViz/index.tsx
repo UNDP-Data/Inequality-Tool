@@ -20,11 +20,11 @@ const MapEl = styled.div`
   max-height: 64rem;
   @media (max-width: 960px) {
     width: 100%;
-    height: calc(730 * (100vw - 40px) / 960);
+    height: calc(640 * (100vw - 40px) / 960);
   }
   @media (max-width: 620px) {
     width: 100%;
-    height: calc(1024 * (100vw - 40px) / 960);
+    height: calc(640 * (100vw - 40px) / 960);
   }
 `;
 
@@ -149,7 +149,8 @@ const HeaderEl = styled.div`
   padding:1.5rem 1rem 1rem 1rem;
   box-shadow: var(--shadow-bottom);
   border-bottom: 1px solid var(--black-400);
-  font-size: 2rem;
+  font-size: 2.4rem;
+  font-weight: bold;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -240,7 +241,7 @@ export const MapViz = (props: Props) => {
           <Select
             options={years}
             className='countrySelect'
-            onChange={(el: any) => { setSelectedYear(el[0].label); setPlay(false); }}
+            onChange={(el: any) => { setSelectedYear(el[0].label); }}
             values={[{ label: selectedYear }]}
             labelField='label'
             valueField='label'

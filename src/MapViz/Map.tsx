@@ -339,10 +339,10 @@ export const Map = (props: Props) => {
                 <div>
                   ←
                   {' '}
-                  {indicator === 'top10WID' ? 'Low is Better' : 'Low is Worse'}
+                  {indicator === 'top10WID' ? 'Less Inequality' : 'More Inequality'}
                 </div>
                 <div>
-                  {indicator === 'top10WID' ? 'High is Worse' : 'High is Better'}
+                  {indicator === 'top10WID' ? 'More Inequality' : 'Less Inequality'}
                   {' '}
                   →
                 </div>

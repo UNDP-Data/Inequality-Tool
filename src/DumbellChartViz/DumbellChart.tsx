@@ -39,68 +39,70 @@ export const DumbellChart = (props: Props) => {
   return (
     <>
       <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth} ${(arrayLength * rowHeight) + marginTop}`}>
-        <text
-          x={0}
-          y={0}
-          dy='30px'
-          fontSize='14px'
-          color='#110848'
-          fontWeight={700}
-        >
-          Countries
-        </text>
         <g>
           <text
-            x={leftPadding}
+            x={0}
             y={0}
             dy='30px'
             fontSize='14px'
             color='#110848'
             fontWeight={700}
           >
-            Income Share Difference
+            Countries
           </text>
-          <circle
-            cx={leftPadding + 180}
-            cy={25}
-            r={5}
-            fill='#E26B8D'
-          />
+          <g>
+            <text
+              x={leftPadding}
+              y={0}
+              dy='30px'
+              fontSize='14px'
+              color='#110848'
+              fontWeight={700}
+            >
+              Income Share Difference
+            </text>
+            <circle
+              cx={leftPadding + 180}
+              cy={25}
+              r={5}
+              fill='#E26B8D'
+            />
+            <text
+              x={leftPadding + 190}
+              y={0}
+              dy='30px'
+              fontSize='14px'
+              color='#E26B8D'
+            >
+              Bottom 40%
+            </text>
+            <circle
+              cx={leftPadding + 285}
+              cy={25}
+              r={5}
+              fill='#266291'
+            />
+            <text
+              x={leftPadding + 295}
+              y={0}
+              dy='30px'
+              fontSize='14px'
+              color='#266291'
+            >
+              Top 10%
+            </text>
+          </g>
           <text
-            x={leftPadding + 190}
+            x={graphWidth - rightPadding + 20}
             y={0}
             dy='30px'
             fontSize='14px'
-            color='#E26B8D'
+            color='#110848'
+            fontWeight={700}
           >
-            Bottom 40%
-          </text>
-          <circle
-            cx={leftPadding + 285}
-            cy={25}
-            r={5}
-            fill='#266291'
-          />
-          <text
-            x={leftPadding + 295}
-            y={0}
-            dy='30px'
-            fontSize='14px'
-            color='#266291'
-          >
-            Top 10%
+            Income Share Ratio
           </text>
         </g>
-        <text
-          x={graphWidth - rightPadding + 20}
-          y={0}
-          dy='30px'
-          fontSize='14px'
-          color='#110848'
-          fontWeight={700}
-        >
-          Income Share Ratio
-        </text>
         {
           sortedData.map((d, i) => (
             d
