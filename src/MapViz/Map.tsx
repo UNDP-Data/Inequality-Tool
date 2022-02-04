@@ -4,7 +4,7 @@ import {
 import { scaleThreshold } from 'd3-scale';
 import { select } from 'd3-selection';
 import { geoEqualEarth } from 'd3-geo';
-import { zoom } from 'd3-zoom';
+import { zoom, zoomIdentity } from 'd3-zoom';
 import styled from 'styled-components';
 import world from './worldMap.json';
 import {
@@ -129,6 +129,22 @@ const ColorHelpEl = styled.div`
   line-height: 1rem;
 `;
 
+const ButtonEl = styled.button`
+  background-color: var(--black-450);
+  color: var(--black);
+  border-radius: 2px;
+  border: 0;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  margin-top: -5.7rem;
+  z-index: 10;
+  position: relative;
+  margin-left: 2rem;
+  font-weight: bold;
+  float:left;
+  cursor: pointer;
+`;
+
 export const Map = (props: Props) => {
   const {
     data,
@@ -160,14 +176,34 @@ export const Map = (props: Props) => {
   useEffect(() => {
     const mapGSelect = select(mapG.current);
     const mapSvgSelect = select(mapSvg.current);
+
+    function zoomed(event: any) {
+      mapGSelect.attr('transform', event.transform); // updated for d3 v4
+    }
     const zoomBehaviour = zoom()
       .scaleExtent([0.8, 6])
       .translateExtent([[0, 0], [width, height]])
-      .on('zoom', ({ transform }) => {
-        mapGSelect.attr('transform', transform);
-      });
+      .on('zoom', zoomed);
     mapSvgSelect.call(zoomBehaviour as any);
-  }, [height, width, mapG, mapSvg, mapWidth, mapHeight]);
+    if ((ISO3 !== '') && mapWidth && mapHeight) {
+      const countryG = select(`.${ISO3}`);
+      const bbox = (countryG.node() as SVGGElement).getBBox();
+      const centerX = bbox.x + (bbox.width / 2);
+      const centerY = bbox.y + (bbox.height / 2);
+      const scale = Math.max(1, Math.min(8, 0.9 / Math.max(bbox.width / mapWidth, bbox.height / mapHeight)));
+      const translate = [mapWidth / 2 - scale * centerX, mapHeight / 2 - scale * centerY];
+      mapSvgSelect
+        .transition()
+        .duration(750)
+        .call(zoomBehaviour.transform as any, zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+    }
+    if (ISO3 === '') {
+      mapSvgSelect
+        .transition()
+        .duration(750)
+        .call(zoomBehaviour.transform as any, zoomIdentity);
+    }
+  }, [height, width, mapG, mapSvg, mapWidth, mapHeight, ISO3]);
 
   useEffect(() => {
     setColorSettingVisible((mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false));
@@ -179,7 +215,7 @@ export const Map = (props: Props) => {
       mapWidth && mapHeight ? (
         <>
           <div id='graph-node' ref={GraphRef}>
-            <svg width={mapWidth} height={mapHeight} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
+            <svg width={mapWidth} height={mapHeight + 10} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
               <rect
                 x={0}
                 y={0}
@@ -200,6 +236,7 @@ export const Map = (props: Props) => {
                     return (
                       <g
                         key={i}
+                        className={d.properties.ISO3}
                         onClick={() => {
                           if (d.properties.ISO3 === ISO3) {
                             updateCountry('World');
@@ -292,6 +329,13 @@ export const Map = (props: Props) => {
                 }
               </g>
             </svg>
+            {
+              ISO3 !== ''
+                ? (
+                  <ButtonEl type='button' onClick={() => { updateCountry('World'); updateISO3(''); }}>Back To World</ButtonEl>
+                ) : null
+
+            }
             <ColorScaleEl marginTop={colorSettingVisible ? '-21rem' : '-13.32rem'}>
               <TitleEl>
                 <div>Color Settings</div>

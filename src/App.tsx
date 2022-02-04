@@ -19,6 +19,7 @@ const GlobalStyle = createGlobalStyle`
     --black-200: #f5f9fe;
     --black-300: #EDEFF0;
     --black-400: #E9ECF6;
+    --black-450: #DDD;
     --black-500: #A9B1B7;
     --black-550: #666666;
     --black-600: #212121;

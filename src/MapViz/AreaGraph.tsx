@@ -48,7 +48,7 @@ const TitleEl = styled.div<FullScreeProps>`
   text-transform: uppercase;
   color: var(--blue-medium);
   line-height: 1.6rem;
-  margin: ${(props) => (props.isFullscreen ? '0 0 1rem 0' : '3rem 0 1rem 0')};
+  margin: ${(props) => (props.isFullscreen ? '0 0 1rem 0' : '1.5rem 0 1rem 0')};
 `;
 
 export const AreaGraph = (props: Props) => {

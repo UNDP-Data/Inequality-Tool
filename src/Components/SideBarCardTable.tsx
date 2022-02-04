@@ -19,7 +19,6 @@ const CardEl = styled.div`
 const CardTitleEl = styled.div`
   font-size: 1.4rem;
   font-weight: bold;
-  text-transform: uppercase;
   text-align: center;
   color: var(--blue-medium);
   background-color: var(--blue-very-light);

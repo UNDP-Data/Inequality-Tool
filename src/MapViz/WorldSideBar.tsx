@@ -71,8 +71,8 @@ export const WorldSideBar = (props: Props) => {
         />
         <TableEl>
           <SideBarCardTable
-            title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
-            titleSubNote={Indicator === 'top10WID' ? '(Lower value means less inequality)' : '(Higher value means less inequality)'}
+            title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'bottom 40 / top10 Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
+            titleSubNote={Indicator === 'b40T10RatioWID' ? ' (Values closer to 0 imply higher shares for the top 10, while values greater than 1 imply higher bottom 40 shares)' : Indicator === 'top10WID' ? '(Lowest share to Highest share)' : '(Highest share to Lowest share)'}
             data={sortedData}
           />
         </TableEl>
@@ -80,7 +80,7 @@ export const WorldSideBar = (props: Props) => {
       <TableContainer>
         <SideBarCardTable
           title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
-          titleSubNote={Indicator === 'top10WID' ? '(Lower value means less inequality)' : '(Higher value means less inequality)'}
+          titleSubNote={Indicator === 'b40T10RatioWID' ? ' (Values closer to 0 imply higher shares for the top 10, while values greater than 1 imply higher bottom 40 shares)' : Indicator === 'top10WID' ? '(Lowest share to Highest share)' : '(Highest share to Lowest share'}
           data={sortedData}
         />
       </TableContainer>

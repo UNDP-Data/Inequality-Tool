@@ -49,7 +49,7 @@ export const CountrySideBar = (props: Props) => {
     <>
       <CardsContainerEl>
         <SideBarCard
-          title='Income Share: Bottom 40% '
+          title='Income Share: Bottom 40%'
           value={yearData ? `${(yearData.bottom40WID * 100).toFixed(1)}%` : 'NA'}
           valueSubNote={sortedByB40.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
@@ -59,7 +59,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have lower income share for b. 40% (data available for
+              have a lower bottom 40% income share (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
@@ -71,7 +71,7 @@ export const CountrySideBar = (props: Props) => {
           )}
         />
         <SideBarCard
-          title='Income Share: Top 10% '
+          title='Income Share: Top 10%'
           value={yearData ? `${(yearData.top10WID * 100).toFixed(1)}%` : 'NA'}
           valueSubNote={sortedByT10.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
@@ -81,7 +81,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have higher income share for t. 10% (data available for
+              have a higher top 10% income share (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
@@ -93,8 +93,7 @@ export const CountrySideBar = (props: Props) => {
           )}
         />
         <SideBarCard
-          title='Income Share Ratio '
-          titleSubNote='Bottom 40% / Top 10%'
+          title='Income Share Ratio'
           value={yearData ? `${(yearData.b40T10RatioWID).toFixed(3)}` : 'NA'}
           valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
@@ -104,7 +103,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have lower income share ratio (data available for
+              have a lower bottom 40 / top 10 income share ratio (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
