@@ -9,7 +9,6 @@ import { CtxDataType, YearListDataType } from '../Types';
 
 interface Props {
   years: YearListDataType[];
-  // eslint-disable-next-line no-unused-vars
 }
 
 const TimeSliderUnitEl = styled.div`

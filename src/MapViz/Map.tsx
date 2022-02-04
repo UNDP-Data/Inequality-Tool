@@ -166,7 +166,6 @@ export const Map = (props: Props) => {
       .on('zoom', ({ transform }) => {
         mapGSelect.attr('transform', transform);
       });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mapSvgSelect.call(zoomBehaviour as any);
   }, [height, width, mapG, mapSvg, mapWidth, mapHeight]);
 

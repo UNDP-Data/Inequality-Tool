@@ -133,7 +133,6 @@ export const MapViz = (props: Props) => {
     }
   )).sort((a, b) => a.label.localeCompare(b.label));
   countryList.unshift({ label: 'World', ISOCode: '' });
-  // eslint-disable-next-line no-unused-vars
   const [mapWidth, setMapWidth] = useState<number | undefined>(undefined);
   const [mapHeight, setMapHeight] = useState<number | undefined>(undefined);
   const mapRef = useRef<HTMLDivElement>(null);
