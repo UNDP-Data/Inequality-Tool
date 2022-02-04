@@ -116,6 +116,12 @@ const Button = styled.button`
   background-color: transparent !important;
   border: 0 !important;
   padding: 0 !important;
+  &:active{
+    border: 0 !important;
+  }
+  &:focus{
+    border: 0 !important;
+  }
 `;
 
 const ColorHelpEl = styled.div`
@@ -130,19 +136,24 @@ const ColorHelpEl = styled.div`
 `;
 
 const ButtonEl = styled.button`
-  background-color: var(--black-450);
-  color: var(--black);
-  border-radius: 2px;
-  border: 0;
-  box-shadow: var(--shadow);
-  padding: 1rem;
-  margin-top: -5.7rem;
-  z-index: 10;
-  position: relative;
-  margin-left: 2rem;
-  font-weight: bold;
-  float:left;
-  cursor: pointer;
+  background-color: var(--black-450) !important;
+  color: var(--black) !important;
+  border-radius: 2px !important;
+  border: 0 !important;
+  box-shadow: var(--shadow) !important;
+  padding: 1rem !important;
+  margin-top: -6.7rem !important;
+  position: relative !important;
+  margin-left: 2rem !important;
+  font-weight: bold !important;
+  float:left !important;
+  cursor: pointer !important;
+  &:active{
+    border: 0 !important;
+  }
+  &:focus{
+    border: 0 !important;
+  }
 `;
 
 export const Map = (props: Props) => {
@@ -336,7 +347,7 @@ export const Map = (props: Props) => {
                 ) : null
 
             }
-            <ColorScaleEl marginTop={colorSettingVisible ? '-21rem' : '-13.32rem'}>
+            <ColorScaleEl marginTop={colorSettingVisible ? '-22rem' : '-14.32rem'}>
               <TitleEl>
                 <div>Color Settings</div>
                 <Button type='button' onClick={() => { setColorSettingVisible(!colorSettingVisible); }}>
