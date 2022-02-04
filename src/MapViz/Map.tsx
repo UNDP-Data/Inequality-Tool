@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { scaleThreshold } from 'd3-scale';
 import { select } from 'd3-selection';
 import { geoEqualEarth } from 'd3-geo';
@@ -8,22 +10,16 @@ import world from './worldMap.json';
 import {
   TOP10WIDBINS, BOTTOM40WIDBINS, RATIOBINS, COLORSCALE, BOTTOM40KEY, TOP10KEY, RATIOKEY,
 } from '../Constants';
-import { DataType, HoverDataType } from '../Types';
+import { CtxDataType, DataType, HoverDataType } from '../Types';
 import { getValue } from '../Utils/getValue';
 import { Tooltip } from '../Components/Tooltip';
 import { ArrowDown, ArrowUp } from '../icons';
+import Context from '../Context/Context';
 
 interface Props {
-  year: number;
   mapWidth: number | undefined;
   mapHeight: number | undefined;
   data: DataType[];
-  country: string;
-  ISO3: string;
-  // eslint-disable-next-line no-unused-vars
-  setCountry: (d: string) => void;
-  // eslint-disable-next-line no-unused-vars
-  setISO3: (d: string) => void;
 }
 
 const RootEl = styled.div`
@@ -135,19 +131,13 @@ const ColorHelpEl = styled.div`
 
 export const Map = (props: Props) => {
   const {
-    year,
     data,
-    country,
-    ISO3,
     mapWidth,
     mapHeight,
-    setISO3,
-    setCountry,
   } = props;
   const [hoverData, setHoverData] = useState<HoverDataType | undefined>(undefined);
   const [colorKeyHover, setColorKeyHover] = useState<string | undefined>(undefined);
   const [colorSettingVisible, setColorSettingVisible] = useState(mapWidth && mapHeight ? !(mapHeight < 400 || mapWidth < 400) : false);
-  const [indicator, setIndicator] = useState<'bottom40WID' | 'top10WID' | 'b40T10RatioWID'>('b40T10RatioWID');
   const width = 960;
   const height = 650;
   const map: any = world;
@@ -155,8 +145,17 @@ export const Map = (props: Props) => {
   const GraphRef = useRef(null);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);
-  const colorScale = scaleThreshold<number, string>().domain(indicator === 'top10WID' ? TOP10WIDBINS : indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(COLORSCALE);
-  const array = indicator === 'top10WID' ? TOP10KEY : indicator === 'bottom40WID' ? BOTTOM40KEY : RATIOKEY;
+  const {
+    Country,
+    ISO3,
+    Year,
+    Indicator,
+    updateCountry,
+    updateISO3,
+    updateIndicator,
+  } = useContext(Context) as CtxDataType;
+  const colorScale = scaleThreshold<number, string>().domain(Indicator === 'top10WID' ? TOP10WIDBINS : Indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(COLORSCALE);
+  const array = Indicator === 'top10WID' ? TOP10KEY : Indicator === 'bottom40WID' ? BOTTOM40KEY : RATIOKEY;
 
   useEffect(() => {
     const mapGSelect = select(mapG.current);
@@ -191,8 +190,8 @@ export const Map = (props: Props) => {
                 fill='#fff'
                 fillOpacity={0}
                 onClick={() => {
-                  setCountry('World');
-                  setISO3('');
+                  updateCountry('World');
+                  updateISO3('');
                 }}
               />
               <g ref={mapG}>
@@ -204,13 +203,13 @@ export const Map = (props: Props) => {
                         key={i}
                         onClick={() => {
                           if (d.properties.ISO3 === ISO3) {
-                            setCountry('World');
-                            setISO3('');
+                            updateCountry('World');
+                            updateISO3('');
                           } else {
                             const indx = data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3);
                             if (indx !== -1) {
-                              setCountry(d.properties.NAME);
-                              setISO3(d.properties.ISO3);
+                              updateCountry(d.properties.NAME);
+                              updateISO3(d.properties.ISO3);
                             }
                           }
                         }}
@@ -219,8 +218,8 @@ export const Map = (props: Props) => {
                             country: d.properties.NAME,
                             xPosition: event.clientX,
                             yPosition: event.clientY,
-                            indicator,
-                            year,
+                            indicator: Indicator,
+                            year: Year,
                             data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
                           });
                         }}
@@ -229,8 +228,8 @@ export const Map = (props: Props) => {
                             country: d.properties.NAME,
                             xPosition: event.clientX,
                             yPosition: event.clientY,
-                            indicator,
-                            year,
+                            indicator: Indicator,
+                            year: Year,
                             data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
                           });
                         }}
@@ -256,13 +255,13 @@ export const Map = (props: Props) => {
                                 key={j}
                                 opacity={hoverData
                                   ? hoverData.country === d.properties.NAME ? 1 : 0.2
-                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, year, indicator, data)) === colorKeyHover ? 1 : 0.2
-                                    : country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
+                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
+                                    : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
                                 d={masterPath}
                                 className='streetPath'
-                                stroke={getValue(d.properties.ISO3, year, indicator, data) === -1 ? '#DADADA' : '#FFF'}
+                                stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
                                 strokeWidth={0.5}
-                                fill={getValue(d.properties.ISO3, year, indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, year, indicator, data))}
+                                fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
                               />
                             );
                           }) : d.geometry.coordinates.map((el:any, j: number) => {
@@ -277,13 +276,13 @@ export const Map = (props: Props) => {
                                 key={j}
                                 opacity={hoverData
                                   ? hoverData.country === d.properties.NAME ? 1 : 0.2
-                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, year, indicator, data)) === colorKeyHover ? 1 : 0.2
-                                    : country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
+                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
+                                    : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
                                 d={path}
                                 className='streetPath'
-                                stroke={getValue(d.properties.ISO3, year, indicator, data) === -1 ? '#DADADA' : '#FFF'}
+                                stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
                                 strokeWidth={0.5}
-                                fill={getValue(d.properties.ISO3, year, indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, year, indicator, data))}
+                                fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
                               />
                             );
                           })
@@ -307,26 +306,26 @@ export const Map = (props: Props) => {
                 colorSettingVisible
                   ? (
                     <OptionContainerEl>
-                      <OptionEl onClick={() => { setIndicator('b40T10RatioWID'); }}>
+                      <OptionEl onClick={() => { updateIndicator('b40T10RatioWID'); }}>
                         <RadioEl>
                           {' '}
-                          <RadioIcon selected={indicator === 'b40T10RatioWID'} />
+                          <RadioIcon selected={Indicator === 'b40T10RatioWID'} />
                           {' '}
                         </RadioEl>
                         <>Income Share Ratio: Bottom 40% / Top 10%</>
                       </OptionEl>
-                      <OptionEl onClick={() => { setIndicator('bottom40WID'); }}>
+                      <OptionEl onClick={() => { updateIndicator('bottom40WID'); }}>
                         <RadioEl>
                           {' '}
-                          <RadioIcon selected={indicator === 'bottom40WID'} />
+                          <RadioIcon selected={Indicator === 'bottom40WID'} />
                           {' '}
                         </RadioEl>
                         <>Income Share: Bottom 40%</>
                       </OptionEl>
-                      <OptionEl onClick={() => { setIndicator('top10WID'); }}>
+                      <OptionEl onClick={() => { updateIndicator('top10WID'); }}>
                         <RadioEl>
                           {' '}
-                          <RadioIcon selected={indicator === 'top10WID'} />
+                          <RadioIcon selected={Indicator === 'top10WID'} />
                           {' '}
                         </RadioEl>
                         <>Income Share: Top 10%</>
@@ -339,10 +338,10 @@ export const Map = (props: Props) => {
                 <div>
                   ←
                   {' '}
-                  {indicator === 'top10WID' ? 'Less Inequality' : 'More Inequality'}
+                  {Indicator === 'top10WID' ? 'Less Inequality' : 'More Inequality'}
                 </div>
                 <div>
-                  {indicator === 'top10WID' ? 'More Inequality' : 'Less Inequality'}
+                  {Indicator === 'top10WID' ? 'More Inequality' : 'Less Inequality'}
                   {' '}
                   →
                 </div>

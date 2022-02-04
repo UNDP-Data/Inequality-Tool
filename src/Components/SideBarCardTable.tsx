@@ -1,10 +1,11 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
-import { DataType } from '../Types';
+import Context from '../Context/Context';
+import { CtxDataType, DataType } from '../Types';
 
 interface Props {
     title: string;
     data: DataType[];
-    year: number;
     titleSubNote: string;
 }
 
@@ -44,6 +45,10 @@ const RowEl = styled.span`
   justify-content: space-between;
   align-items: center;
   padding: 0 1rem;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--black-100);
+  }
 `;
 
 const LeftEl = styled.div`
@@ -67,10 +72,15 @@ export const SideBarCardTable = (props: Props) => {
   const {
     title,
     data,
-    year,
     titleSubNote,
   } = props;
 
+  const {
+    Year,
+    Indicator,
+    updateCountry,
+    updateISO3,
+  } = useContext(Context) as CtxDataType;
   return (
     <CardEl>
       <CardTitleEl>
@@ -82,6 +92,7 @@ export const SideBarCardTable = (props: Props) => {
         {data.reverse().map((d, i) => (
           <RowEl
             key={i}
+            onClick={() => { updateCountry(d.country); updateISO3(d.ISOAlpha3); }}
           >
             <LeftEl>
               <IndexEl>
@@ -92,7 +103,7 @@ export const SideBarCardTable = (props: Props) => {
               </div>
             </LeftEl>
             <div>
-              {d.data[d.data.findIndex((el) => el.year === year)].b40T10RatioWID.toFixed(3)}
+              {Indicator === 'b40T10RatioWID' ? d.data[d.data.findIndex((el) => el.year === Year)].b40T10RatioWID.toFixed(3) : `${(d.data[d.data.findIndex((el) => el.year === Year)][Indicator] * 100).toFixed(2)}%`}
             </div>
           </RowEl>
         ))}

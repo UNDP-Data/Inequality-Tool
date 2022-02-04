@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import styled from 'styled-components';
-import ReactSlider from 'react-slider';
 import Select from 'react-dropdown-select';
-import { DataType, YearListDataType } from '../Types';
-import { PauseIcon, PlayIcon, CaretDown } from '../icons';
+import { CtxDataType, DataType, YearListDataType } from '../Types';
+import { CaretDown } from '../icons';
 import { Map } from './Map';
 import { SideBarBody } from './SideBarBody';
 import { AreaGraph } from './AreaGraph';
+import Context from '../Context/Context';
+import { Slider } from './Slider';
 
 interface Props {
   years: YearListDataType[];
@@ -41,55 +44,6 @@ const VizContainer = styled.div`
   @media (max-width: 960px) {
     flex-wrap: wrap;
   }
-`;
-
-const TimeSliderUnitEl = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.4rem;
-  color: var(--grey);
-  box-shadow: var(--shadow-top);
-  padding: 1rem;
-  position: relative;
-  z-index: 100;
-  background-color: var(--blue-very-light);
-`;
-
-const StyledThumb = styled.div`
-  padding: 0.1rem 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-  background-color: #fff;
-  color: var(--blue-medium);
-  font-weight: bold;
-  box-shadow: var(--shadow);
-  border-radius: 2rem;
-  border: 1px solid var(--blue-medium);
-  cursor: grab;
-  margin-top: 0.9rem;
-`;
-
-const Thumb = (props: any, state: any) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  const val = state.valueNow;
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledThumb {...props}>
-      {val}
-    </StyledThumb>
-  );
-};
-
-const YearsEl = styled.div`
-  margin: 0.2rem 1rem 0 1rem;
-  color: var(--black-550);
-`;
-
-const IconEl = styled.div`
-  cursor: pointer;
-  height: 2.4rem;
-  margin-right: 0.4rem;
-  margin-top: -2px;
 `;
 
 const CaretIconEl = styled.div`
@@ -179,24 +133,18 @@ export const MapViz = (props: Props) => {
     }
   )).sort((a, b) => a.label.localeCompare(b.label));
   countryList.unshift({ label: 'World', ISOCode: '' });
-  const [country, setCountry] = useState('World');
-  const [ISO3, setISO3] = useState('');
-  const [play, setPlay] = useState(false);
-  const [selectedYear, setSelectedYear] = useState<number>(years[years.length - 1].label);
+  // eslint-disable-next-line no-unused-vars
   const [mapWidth, setMapWidth] = useState<number | undefined>(undefined);
   const [mapHeight, setMapHeight] = useState<number | undefined>(undefined);
   const mapRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
-  const timer: { current: NodeJS.Timeout | null } = useRef(null);
-  useEffect(() => {
-    if (play && years) {
-      timer.current = setInterval(() => {
-        setSelectedYear((prevCounter) => (prevCounter ? prevCounter === years[years.length - 1].label ? years[0].label : prevCounter + 1 : 2000));
-      }, 1000);
-    }
-
-    if (!play && timer.current) clearInterval(timer.current);
-  }, [play]);
+  const {
+    Country,
+    ISO3,
+    Year,
+    updateCountry,
+    updateISO3,
+    updateYear,
+  } = useContext(Context) as CtxDataType;
 
   useEffect(() => {
     setMapWidth(mapRef?.current?.offsetWidth);
@@ -208,17 +156,17 @@ export const MapViz = (props: Props) => {
       <HeaderEl>
         <HeaderTextEl>
           Income Shares for
-          {country === 'World' ? ' the' : null}
+          {Country === 'World' ? ' the' : null}
         </HeaderTextEl>
         <FlexDiv>
           <Select
             options={countryList}
             className='countrySelect'
-            onChange={(el: any) => { setCountry(el[0].label); setISO3(el[0].ISOCode); }}
+            onChange={(el: any) => { updateCountry(el[0].label); updateISO3(el[0].ISOCode); }}
             values={
                 [
                   {
-                    label: country,
+                    label: Country,
                     ISOCode: ISO3,
                   },
                 ]
@@ -241,8 +189,8 @@ export const MapViz = (props: Props) => {
           <Select
             options={years}
             className='countrySelect'
-            onChange={(el: any) => { setSelectedYear(el[0].label); }}
-            values={[{ label: selectedYear }]}
+            onChange={(el: any) => { updateYear(el[0].label); }}
+            values={[{ label: Year }]}
             labelField='label'
             valueField='label'
             dropdownHeight='250px'
@@ -257,28 +205,18 @@ export const MapViz = (props: Props) => {
       </HeaderEl>
       <VizContainer>
         <SideBarEl>
-          <SideBarBody
-            country={country}
-            year={selectedYear}
-            data={data}
-            ISO3={ISO3}
-          />
+          <SideBarBody data={data} />
         </SideBarEl>
         <MapEl ref={mapRef}>
           <Map
-            year={selectedYear}
             data={data}
-            setCountry={setCountry}
-            country={country}
-            ISO3={ISO3}
-            setISO3={setISO3}
             mapWidth={mapWidth}
             mapHeight={mapHeight}
           />
         </MapEl>
       </VizContainer>
       {
-        country !== 'World' && data.findIndex((d) => d.ISOAlpha3 === ISO3) !== -1 ? (
+        Country !== 'World' && data.findIndex((d) => d.ISOAlpha3 === ISO3) !== -1 ? (
           <AreaGraphContainer>
             <AreaGraph
               data={data[data.findIndex((d) => d.ISOAlpha3 === ISO3)]}
@@ -287,27 +225,9 @@ export const MapViz = (props: Props) => {
           </AreaGraphContainer>
         ) : null
       }
-      <TimeSliderUnitEl>
-        <IconEl onClick={() => { setPlay(!play); }}>
-          {
-            play
-              ? <PauseIcon size={24} color='#018EFF' />
-              : <PlayIcon size={24} color='#018EFF' />
-          }
-        </IconEl>
-        <YearsEl>{years[0].label}</YearsEl>
-        <ReactSlider
-          min={years[0].label}
-          max={years[years.length - 1].label}
-          step={1}
-          value={selectedYear}
-          className='horizontal-slider'
-          trackClassName='year-slider-track'
-          renderThumb={Thumb}
-          onChange={(d) => { setSelectedYear(d); }}
-        />
-        <YearsEl>{years[years.length - 1].label}</YearsEl>
-      </TimeSliderUnitEl>
+      <Slider
+        years={years}
+      />
     </RootEl>
   );
 };

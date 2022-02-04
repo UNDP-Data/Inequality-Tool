@@ -1,13 +1,12 @@
 import styled from 'styled-components';
+import { useContext } from 'react';
 import { CountrySideBar } from './CountrySideBar';
 import { WorldSideBar } from './WorldSideBar';
-import { DataType } from '../Types';
+import { CtxDataType, DataType } from '../Types';
+import Context from '../Context/Context';
 
 interface Props {
-  year: number;
   data: DataType[];
-  country: string;
-  ISO3: string;
 }
 
 const El = styled.div`
@@ -21,23 +20,24 @@ const El = styled.div`
 
 export const SideBarBody = (props: Props) => {
   const {
-    year,
     data,
-    country,
-    ISO3,
   } = props;
+  const {
+    Country,
+    ISO3,
+  } = useContext(Context) as CtxDataType;
   return (
     <El>
       {
-        country === 'World'
-          ? <WorldSideBar year={year} data={data} />
+        Country === 'World'
+          ? <WorldSideBar data={data} />
           : data.findIndex((d) => d.ISOAlpha3 === ISO3) !== -1
-            ? <CountrySideBar year={year} data={data} iso3={ISO3} />
+            ? <CountrySideBar data={data} />
             : (
               <>
                 Data for
                 {' '}
-                {country}
+                {Country}
                 {' '}
                 is not available
               </>

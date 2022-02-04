@@ -33,3 +33,18 @@ export interface AreaGraphHoverDataType {
   top10WID: number;
   year: number;
 }
+
+export interface CtxDataType {
+  Country: string;
+  ISO3: string;
+  Year: number;
+  Indicator: 'bottom40WID' | 'top10WID' | 'b40T10RatioWID';
+  // eslint-disable-next-line no-unused-vars
+  updateCountry: (d: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  updateISO3: (d: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  updateYear: (d: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  updateIndicator: (d: 'bottom40WID' | 'top10WID' | 'b40T10RatioWID') => void;
+}

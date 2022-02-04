@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
 import styled from 'styled-components';
+import { useContext } from 'react';
 import sortBy from 'lodash.sortby';
 import { AreaGraph } from './AreaGraph';
-import { DataType } from '../Types';
+import { CtxDataType, DataType } from '../Types';
 import { SideBarCard } from '../Components/SideBarCard';
+import Context from '../Context/Context';
 
 interface Props {
-  year: number;
   data: DataType[];
-  iso3: string;
 }
 
 const CardsContainerEl = styled.div`
@@ -34,26 +33,28 @@ const AreaGraphEl = styled.div`
 
 export const CountrySideBar = (props: Props) => {
   const {
-    year,
     data,
-    iso3,
   } = props;
-  const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === year) !== -1);
-  const sortedByRatio = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].b40T10RatioWID);
-  const sortedByB40 = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].bottom40WID);
-  const sortedByT10 = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].top10WID).reverse();
-  const countryIndx = data.findIndex((d) => d.ISOAlpha3 === iso3);
-  const yearData = data[countryIndx].data.findIndex((d) => d.year === year) !== -1 ? data[countryIndx].data[data[countryIndx].data.findIndex((d) => d.year === year)] : undefined;
+  const {
+    ISO3,
+    Year,
+  } = useContext(Context) as CtxDataType;
+  const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === Year) !== -1);
+  const sortedByRatio = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].b40T10RatioWID);
+  const sortedByB40 = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].bottom40WID);
+  const sortedByT10 = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].top10WID).reverse();
+  const countryIndx = data.findIndex((d) => d.ISOAlpha3 === ISO3);
+  const yearData = data[countryIndx].data.findIndex((d) => d.year === Year) !== -1 ? data[countryIndx].data[data[countryIndx].data.findIndex((d) => d.year === Year)] : undefined;
   return (
     <>
       <CardsContainerEl>
         <SideBarCard
           title='Income Share: Bottom 40% '
           value={yearData ? `${(yearData.bottom40WID * 100).toFixed(1)}%` : 'NA'}
-          valueSubNote={sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+          valueSubNote={sortedByB40.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
               <span className='bold' style={{ color: 'var(--black-700)' }}>
-                {(filteredData.length - (sortedByB40.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {(filteredData.length - (sortedByB40.findIndex((d) => d.ISOAlpha3 === ISO3) + 1))}
                 {' '}
                 countries
               </span>
@@ -72,10 +73,10 @@ export const CountrySideBar = (props: Props) => {
         <SideBarCard
           title='Income Share: Top 10% '
           value={yearData ? `${(yearData.top10WID * 100).toFixed(1)}%` : 'NA'}
-          valueSubNote={sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+          valueSubNote={sortedByT10.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
               <span className='bold' style={{ color: 'var(--black-700)' }}>
-                {(filteredData.length - (sortedByT10.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {(filteredData.length - (sortedByT10.findIndex((d) => d.ISOAlpha3 === ISO3) + 1))}
                 {' '}
                 countries
               </span>
@@ -95,10 +96,10 @@ export const CountrySideBar = (props: Props) => {
           title='Income Share Ratio '
           titleSubNote='Bottom 40% / Top 10%'
           value={yearData ? `${(yearData.b40T10RatioWID).toFixed(3)}` : 'NA'}
-          valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) === -1 ? undefined : (
+          valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
               <span className='bold' style={{ color: 'var(--black-700)' }}>
-                {(filteredData.length - (sortedByRatio.findIndex((d) => d.ISOAlpha3 === iso3) + 1))}
+                {(filteredData.length - (sortedByRatio.findIndex((d) => d.ISOAlpha3 === ISO3) + 1))}
                 {' '}
                 countries
               </span>

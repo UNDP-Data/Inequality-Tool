@@ -1,12 +1,13 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
 import meanBy from 'lodash.meanby';
 import sortBy from 'lodash.sortby';
-import { DataType } from '../Types';
+import { CtxDataType, DataType } from '../Types';
 import { SideBarCard } from '../Components/SideBarCard';
 import { SideBarCardTable } from '../Components/SideBarCardTable';
+import Context from '../Context/Context';
 
 interface Props {
-  year: number;
   data: DataType[];
 }
 
@@ -39,14 +40,17 @@ const TableContainer = styled.div`
 `;
 export const WorldSideBar = (props: Props) => {
   const {
-    year,
     data,
   } = props;
-  const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === year) !== -1);
-  const meanRatio = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].b40T10RatioWID);
-  const meanBottom40 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].bottom40WID);
-  const meanTop10 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].top10WID);
-  const sortedData = sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === year)].b40T10RatioWID).reverse();
+  const {
+    Year,
+    Indicator,
+  } = useContext(Context) as CtxDataType;
+  const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === Year) !== -1);
+  const meanRatio = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].b40T10RatioWID);
+  const meanBottom40 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].bottom40WID);
+  const meanTop10 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].top10WID);
+  const sortedData = Indicator === 'top10WID' ? sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)][Indicator]) : sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)][Indicator]).reverse();
   return (
     <>
       <CardsContainerEl>
@@ -67,19 +71,17 @@ export const WorldSideBar = (props: Props) => {
         />
         <TableEl>
           <SideBarCardTable
-            title='Countries with Highest Income Share Ratio'
-            titleSubNote='(Higher value means less inequality)'
+            title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
+            titleSubNote={Indicator === 'top10WID' ? '(Lower value means less inequality)' : '(Higher value means less inequality)'}
             data={sortedData}
-            year={year}
           />
         </TableEl>
       </CardsContainerEl>
       <TableContainer>
         <SideBarCardTable
-          title='Income Share Ratio For All Countries'
-          titleSubNote='(Higher value means less inequality)'
+          title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
+          titleSubNote={Indicator === 'top10WID' ? '(Lower value means less inequality)' : '(Higher value means less inequality)'}
           data={sortedData}
-          year={year}
         />
       </TableContainer>
     </>

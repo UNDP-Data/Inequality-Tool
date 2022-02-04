@@ -1,11 +1,13 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { csv } from 'd3-request';
 import { nest } from 'd3-collection';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import { DataType, YearListDataType } from './Types';
 import { MapViz } from './MapViz';
 import { DumbellChartViz } from './DumbellChartViz';
+import Reducer from './Context/Reducer';
+import Context from './Context/Context';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -190,6 +192,40 @@ display: flex;
 const App = () => {
   const [finalData, setFinalData] = useState<DataType[] | undefined>(undefined);
   const [years, setYears] = useState<YearListDataType[] | undefined>(undefined);
+
+  const initialState = {
+    Country: 'World',
+    ISO3: '',
+    Year: 2021,
+    Indicator: 'b40T10RatioWID',
+  };
+
+  const [state, dispatch] = useReducer(Reducer, initialState);
+
+  const updateCountry = (country: string) => {
+    dispatch({
+      type: 'UPDATE_COUNTRY',
+      payload: country,
+    });
+  };
+  const updateISO3 = (iso3: string) => {
+    dispatch({
+      type: 'UPDATE_ISO3',
+      payload: iso3,
+    });
+  };
+  const updateIndicator = (indicator: string) => {
+    dispatch({
+      type: 'UPDATE_INDICATOR',
+      payload: indicator,
+    });
+  };
+  const updateYear = (year: number) => {
+    dispatch({
+      type: 'UPDATE_YEAR',
+      payload: year,
+    });
+  };
   useEffect(() => {
     csv('./data/b40t10share_wid.csv', (error, data) => {
       if (error) throw error;
@@ -225,6 +261,7 @@ const App = () => {
       });
       setFinalData(formattedData);
       setYears(yearList);
+      updateYear(yearList[yearList.length - 1].label);
     });
   }, []);
   return (
@@ -234,14 +271,27 @@ const App = () => {
         finalData && years
           ? (
             <>
-              <MapViz
-                data={finalData}
-                years={years}
-              />
-              <DumbellChartViz
-                data={finalData}
-                years={years}
-              />
+              <Context.Provider
+                value={{
+                  Country: state.Country,
+                  ISO3: state.ISO3,
+                  Year: state.Year,
+                  Indicator: state.Indicator,
+                  updateCountry,
+                  updateISO3,
+                  updateYear,
+                  updateIndicator,
+                }}
+              >
+                <MapViz
+                  data={finalData}
+                  years={years}
+                />
+                <DumbellChartViz
+                  data={finalData}
+                  years={years}
+                />
+              </Context.Provider>
             </>
           )
           : (
@@ -253,7 +303,7 @@ const App = () => {
               />
             </LoaderEl>
           )
-      }
+        }
     </>
   );
 };
