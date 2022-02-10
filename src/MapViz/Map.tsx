@@ -71,6 +71,7 @@ const ColorKeyEl = styled.div<ColorKeyElProps>`
 const KeyValue = styled.div`
   text-align: center;
   font-size: 1rem;
+  font-weight: normal;
 `;
 
 const OptionContainerEl = styled.div`
@@ -82,6 +83,7 @@ const OptionEl = styled.div`
   align-items: center;
   cursor: pointer;
   text-transform: uppercase;
+  font-weight: normal;
 `;
 
 interface SelectedProps{

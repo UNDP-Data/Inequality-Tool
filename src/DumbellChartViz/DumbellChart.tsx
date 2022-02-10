@@ -73,6 +73,7 @@ export const DumbellChart = (props: Props) => {
               dy='30px'
               fontSize='14px'
               color='#E26B8D'
+              fontWeight='normal'
             >
               Bottom 40%
             </text>
@@ -88,6 +89,7 @@ export const DumbellChart = (props: Props) => {
               dy='30px'
               fontSize='14px'
               color='#266291'
+              fontWeight='normal'
             >
               Top 10%
             </text>
@@ -149,9 +151,10 @@ export const DumbellChart = (props: Props) => {
                     x={xPos(d.bottom40WID) + leftPadding}
                     y={0}
                     dy='7px'
-                    fontSize='10px'
+                    fontSize='12px'
                     fill='#E26B8D'
                     textAnchor='middle'
+                    fontWeight='normal'
                   >
                     {(d.bottom40WID * 100).toFixed(2)}
                     %
@@ -166,9 +169,10 @@ export const DumbellChart = (props: Props) => {
                     x={xPos(d.top10WID) + leftPadding}
                     y={0}
                     dy='7px'
-                    fontSize='10px'
+                    fontSize='12px'
                     fill='#266291'
                     textAnchor='middle'
+                    fontWeight='normal'
                   >
                     {(d.top10WID * 100).toFixed(2)}
                     %

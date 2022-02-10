@@ -43,6 +43,7 @@ const TooltipBody = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 1rem;
+  font-weight: normal;
   font-size: 1.4rem;
   line-height: 2rem;
   color: var(--black);
@@ -150,8 +151,7 @@ export const Tooltip = (props: Props) => {
                           dy='3px'
                           fill='#919399'
                         >
-                          {(d * 100)}
-                          %
+                          {data.indicator === 'b40T10RatioWID' ? `${d}` : `${(d * 100)}%`}
                         </text>
                       </g>
                     ))}
