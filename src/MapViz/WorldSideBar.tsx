@@ -66,12 +66,13 @@ export const WorldSideBar = (props: Props) => {
         />
         <SideBarCard
           title='Income Share Ratio'
+          tooltip
           titleSubNote={`Bottom 40% / Top 10%, Avg. of ${filteredData.length} countries`}
           value={`${(meanRatio).toFixed(3)}`}
         />
         <TableEl>
           <SideBarCardTable
-            title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'bottom 40 / top10 Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
+            title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Bottom 40% / Top 10% Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}
             titleSubNote={Indicator === 'b40T10RatioWID' ? ' (Values closer to 0 imply higher shares for the top 10, while values greater than 1 imply higher bottom 40 shares)' : Indicator === 'top10WID' ? '(Lowest share to Highest share)' : '(Highest share to Lowest share)'}
             data={sortedData}
           />

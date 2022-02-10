@@ -145,7 +145,6 @@ const ButtonEl = styled.button`
   margin-top: -6.7rem !important;
   position: relative !important;
   margin-left: 2rem !important;
-  font-weight: bold !important;
   float:left !important;
   cursor: pointer !important;
   &:active{
@@ -343,7 +342,7 @@ export const Map = (props: Props) => {
             {
               ISO3 !== ''
                 ? (
-                  <ButtonEl type='button' onClick={() => { updateCountry('World'); updateISO3(''); }}>Back To World</ButtonEl>
+                  <ButtonEl type='button' onClick={() => { updateCountry('World'); updateISO3(''); }}><span className='bold'>Back To World</span></ButtonEl>
                 ) : null
 
             }
@@ -392,10 +391,10 @@ export const Map = (props: Props) => {
                 <div>
                   ←
                   {' '}
-                  {Indicator === 'top10WID' ? 'Less Inequality' : 'More Inequality'}
+                  {Indicator === 'top10WID' ? 'Lower Inequality' : 'Higher Inequality'}
                 </div>
                 <div>
-                  {Indicator === 'top10WID' ? 'More Inequality' : 'Less Inequality'}
+                  {Indicator === 'top10WID' ? 'Higher Inequality' : 'Lower Inequality'}
                   {' '}
                   →
                 </div>

@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import styled from 'styled-components';
+import { InfoIcon } from '../icons';
+import { HelpToolTip } from './HelpToolTip';
 
 interface Props {
     title: string;
     titleSubNote?: string;
+    tooltip?: boolean;
     value: string;
     // eslint-disable-next-line no-undef
     valueSubNote?: JSX.Element;
@@ -64,20 +68,65 @@ const ValueSubNoteSpan = styled.div`
   margin-top: 1rem;
 `;
 
+const TitleEl = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const IconEl = styled.div`
+  height: 18px;
+  margin-left: 5px;
+  cursor: pointer;
+`;
+
 export const SideBarCard = (props: Props) => {
   const {
     title,
+    tooltip,
     titleSubNote,
     value,
     valueSubNote,
   } = props;
 
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
   return (
     <CardEl>
       <CardTitleEl>
-        {title}
-        {' '}
-        <br />
+        <TitleEl>
+          {title}
+          {
+            tooltip ? (
+              <IconEl
+                onMouseEnter={(event) => { setShowPopUp(true); setX(event.clientX); setY(event.clientY); }}
+                onMouseLeave={() => { setShowPopUp(false); }}
+              >
+                <InfoIcon size={16} color='#666666' />
+              </IconEl>
+            ) : null
+          }
+
+          {
+            showPopUp
+              ? (
+                <HelpToolTip
+                  x={x}
+                  y={y}
+                  text={(
+                    <>
+                      Income share of bottom 40% by income share of top 10%.
+                      {' '}
+                      <span className='bold'>
+                        Values lower than 1 imply higher T10 income shares and lower B40 income shares.
+                      </span>
+                    </>
+                  )}
+                />
+              ) : null
+          }
+        </TitleEl>
         <SubNote>
           {titleSubNote}
         </SubNote>

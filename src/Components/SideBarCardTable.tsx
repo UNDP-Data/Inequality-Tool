@@ -33,7 +33,7 @@ const CardTitleEl = styled.div`
 
 const CardBodyEl = styled.div`
   font-size: 1.4rem;
-  line-height: 3.5rem;
+  line-height: 2rem;
   padding: 1.5rem 0;
   color: var(--black);
   background-color: var(--white);
@@ -43,7 +43,7 @@ const RowEl = styled.span`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   &:hover {
     background-color: var(--black-100);

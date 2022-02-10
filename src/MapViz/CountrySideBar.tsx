@@ -59,7 +59,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have a lower bottom 40% income share (data available for
+              have a higher bottom 40% income share (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
@@ -81,7 +81,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have a higher top 10% income share (data available for
+              have a lower top 10% income share (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
@@ -94,6 +94,7 @@ export const CountrySideBar = (props: Props) => {
         />
         <SideBarCard
           title='Income Share Ratio'
+          tooltip
           value={yearData ? `${(yearData.b40T10RatioWID).toFixed(3)}` : 'NA'}
           valueSubNote={sortedByRatio.findIndex((d) => d.ISOAlpha3 === ISO3) === -1 ? undefined : (
             <>
@@ -103,7 +104,7 @@ export const CountrySideBar = (props: Props) => {
                 countries
               </span>
               {' '}
-              have a lower bottom 40 / top 10 income share ratio (data available for
+              have a higher bottom 40 / top 10 income share ratio (data available for
               {' '}
               <span className='bold'>
                 {filteredData.length}
