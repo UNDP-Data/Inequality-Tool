@@ -8,7 +8,7 @@ import { zoom, zoomIdentity } from 'd3-zoom';
 import styled from 'styled-components';
 import world from './worldMap.json';
 import {
-  TOP10WIDBINS, BOTTOM40WIDBINS, RATIOBINS, COLORSCALE, BOTTOM40KEY, TOP10KEY, RATIOKEY,
+  TOP10WIDBINS, BOTTOM40WIDBINS, RATIOBINS, BOTTOM40KEY, TOP10KEY, RATIOKEY, GREENCOLORSCALE, REDCOLORSCALE, REDFLIPPEDCOLORSCALE,
 } from '../Constants';
 import { CtxDataType, DataType, HoverDataType } from '../Types';
 import { getValue } from '../Utils/getValue';
@@ -180,7 +180,7 @@ export const Map = (props: Props) => {
     updateISO3,
     updateIndicator,
   } = useContext(Context) as CtxDataType;
-  const colorScale = scaleThreshold<number, string>().domain(Indicator === 'top10WID' ? TOP10WIDBINS : Indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(COLORSCALE);
+  const colorScale = scaleThreshold<number, string>().domain(Indicator === 'top10WID' ? TOP10WIDBINS : Indicator === 'bottom40WID' ? BOTTOM40WIDBINS : RATIOBINS).range(Indicator === 'top10WID' ? REDCOLORSCALE : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE : GREENCOLORSCALE);
   const array = Indicator === 'top10WID' ? TOP10KEY : Indicator === 'bottom40WID' ? BOTTOM40KEY : RATIOKEY;
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export const Map = (props: Props) => {
     const mapSvgSelect = select(mapSvg.current);
 
     function zoomed(event: any) {
-      mapGSelect.attr('transform', event.transform); // updated for d3 v4
+      mapGSelect.attr('transform', event.transform);
     }
     const zoomBehaviour = zoom()
       .scaleExtent([0.8, 6])
@@ -391,10 +391,10 @@ export const Map = (props: Props) => {
                 <div>
                   ←
                   {' '}
-                  {Indicator === 'top10WID' ? 'Lower Inequality' : 'Higher Inequality'}
+                  {Indicator === 'b40T10RatioWID' ? 'Higher Inequality' : 'Lower Income Share'}
                 </div>
                 <div>
-                  {Indicator === 'top10WID' ? 'Higher Inequality' : 'Lower Inequality'}
+                  {Indicator === 'b40T10RatioWID' ? 'Lower Inequality' : 'Higher Income Share'}
                   {' '}
                   →
                 </div>
@@ -405,14 +405,14 @@ export const Map = (props: Props) => {
                     <ColorKeyEl
                       key={i}
                       onMouseEnter={() => {
-                        setColorKeyHover(COLORSCALE[i]);
+                        setColorKeyHover(Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]);
                       }}
                       onMouseLeave={() => {
                         setColorKeyHover(undefined);
                       }}
                     >
                       <ColorKeyRect
-                        fill={COLORSCALE[i]}
+                        fill={Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]}
                       />
                       <KeyValue>
                         {d}
