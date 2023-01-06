@@ -9,22 +9,13 @@ interface Props {
     titleSubNote: string;
 }
 
-const CardEl = styled.div`
-  border-radius: 5px;
-  box-shadow: var(--shadow);
-  max-height: 30rem;
-  overflow: auto;
-`;
-
 const CardTitleEl = styled.div`
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   font-weight: bold;
   text-align: center;
-  color: var(--blue-medium);
-  background-color: var(--blue-very-light);
-  padding: 0.75rem 0.5rem;
-  line-height: 1.6rem;
-  position:sticky;
+  background-color: var(--gray-300);
+  padding: 0.5rem;
+  position: sticky;
   top: 0;
   @media (max-width: 960px) {
     font-size: 1.2rem;
@@ -32,18 +23,16 @@ const CardTitleEl = styled.div`
 `;
 
 const CardBodyEl = styled.div`
-  font-size: 1.4rem;
-  line-height: 2rem;
-  padding: 1.5rem 0;
-  color: var(--black);
-  background-color: var(--white);
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  background-color: var(--gray-100);
 `;
 
 const RowEl = styled.span`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.5rem;
   cursor: pointer;
   &:hover {
     background-color: var(--black-100);
@@ -55,13 +44,12 @@ const LeftEl = styled.div`
 `;
 
 const IndexEl = styled.div`
-  width: 2rem;
-  margin-right: 1rem;
+  width: 1.25rem;
+  margin-right: 0.75rem;
 `;
 
 const Span = styled.span`
-  font-size: 1.2rem;
-  color: var(--black-550);
+  font-size: 0.75rem;
   text-transform: none;
   font-weight: normal;
   font-style: italic;
@@ -81,7 +69,7 @@ export const SideBarCardTable = (props: Props) => {
     updateISO3,
   } = useContext(Context) as CtxDataType;
   return (
-    <CardEl>
+    <div style={{ maxHeight: '18.75rem', overflow: 'auto' }} className='undp-scrollbar'>
       <CardTitleEl>
         {title}
         {' '}
@@ -107,6 +95,6 @@ export const SideBarCardTable = (props: Props) => {
           </RowEl>
         ))}
       </CardBodyEl>
-    </CardEl>
+    </div>
   );
 };

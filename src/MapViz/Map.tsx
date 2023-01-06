@@ -6,6 +6,7 @@ import { select } from 'd3-selection';
 import { geoEqualEarth } from 'd3-geo';
 import { zoom, zoomIdentity } from 'd3-zoom';
 import styled from 'styled-components';
+import { Radio, Space } from 'antd';
 import world from './worldMap.json';
 import {
   TOP10WIDBINS, BOTTOM40WIDBINS, RATIOBINS, BOTTOM40KEY, TOP10KEY, RATIOKEY, GREENCOLORSCALE, REDCOLORSCALE, REDFLIPPEDCOLORSCALE,
@@ -16,6 +17,10 @@ import { Tooltip } from '../Components/Tooltip';
 import { ArrowDown, ArrowUp } from '../icons';
 import Context from '../Context/Context';
 
+import '../style/radioStyle.css';
+import '../style/buttonStyle.css';
+import { SideBarBody } from './SideBarBody';
+
 interface Props {
   mapWidth: number | undefined;
   mapHeight: number | undefined;
@@ -23,35 +28,34 @@ interface Props {
 }
 
 const RootEl = styled.div`
-  background-color: var(--blue-very-light);
   position: relative;
 `;
 interface MarginProps {
   marginTop: string;
 }
+
 const ColorScaleEl = styled.div<MarginProps>`
   margin-top: ${(props) => props.marginTop};
-  padding: 1rem 1rem 0 1rem;
+  padding: 1rem;
   border-radius: 0.2rem;
-  box-shadow: var(--shadow);
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.8);
   z-index: 10;
   position: relative;
   margin-right: 1rem;
-  float:right;
+  float: right;
 `;
 
 const FlexDiv = styled.div`
   display: flex;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 `;
 
 interface ColorKeySquareProps {
   fill: string;
 }
 const ColorKeyRect = styled.div<ColorKeySquareProps>`
-  width: 4rem;
-  height: 1rem;
+  width: 3rem;
+  height: 0.75rem;
   background-color: ${(props) => props.fill};
 `;
 interface ColorKeyElProps {
@@ -60,58 +64,18 @@ interface ColorKeyElProps {
 
 const ColorKeyEl = styled.div<ColorKeyElProps>`
   margin: ${(props) => (props.flex ? '0 1rem' : '0')};
-  font-size: 1.2rem;
-  color: var(--navy);
+  font-size: 0.75rem;
   display: ${(props) => (props.flex ? 'flex' : 'inline')};
   align-items: center;
   width: fit-content;
   justify-content: flex-start;
 `;
 
-const KeyValue = styled.div`
+const KeyValue = styled.p`
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: normal;
-`;
-
-const OptionContainerEl = styled.div`
-  font-size: 1.2rem;
-`;
-
-const OptionEl = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: normal;
-`;
-
-interface SelectedProps{
-  selected?: boolean;
-}
-
-const RadioEl = styled.div`
-  border: 2px solid var(--black-550);
-  border-radius: 2rem;
-  background-color: transparent;
-  padding: 0.2rem;
-  margin-right: 0.5rem;
-`;
-
-const RadioIcon = styled.div<SelectedProps>`
-  width: 0.8rem;
-  height: 0.8rem;
-  background-color: ${(props) => (props.selected ? 'var(--black-550)' : 'transparent')};
-  border-radius: 0.6rem;
-`;
-
-const TitleEl = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin: 0;
 `;
 
 const Button = styled.button`
@@ -129,32 +93,21 @@ const Button = styled.button`
 const ColorHelpEl = styled.div`
   color: var(--black-700);
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 0;
-  line-height: 1rem;
 `;
 
-const ButtonEl = styled.button`
-  background-color: var(--black-450) !important;
-  color: var(--black) !important;
-  border-radius: 2px !important;
-  border: 0 !important;
-  box-shadow: var(--shadow) !important;
-  padding: 1rem !important;
-  margin-top: -6.7rem !important;
-  position: relative !important;
-  margin-left: 2rem !important;
-  float:left !important;
-  cursor: pointer !important;
-  &:active{
-    border: 0 !important;
-  }
-  &:focus{
-    border: 0 !important;
-  }
+const InfoPanelEl = styled.div`
+  margin-top: 1rem;
+  background-color: rgba(255,255,255,0.8);
+  z-index: 10;
+  position: absolute;
+  left: 1rem;
+  width: 17.5rem;
+  top: 0;
 `;
 
 export const Map = (props: Props) => {
@@ -169,7 +122,7 @@ export const Map = (props: Props) => {
   const width = 960;
   const height = 650;
   const map: any = world;
-  const projection = geoEqualEarth().rotate([0, 0]).scale(225).translate([400, 350]);
+  const projection = geoEqualEarth().rotate([0, 0]).scale(210).translate([475, 350]);
   const GraphRef = useRef(null);
   const mapSvg = useRef<SVGSVGElement>(null);
   const mapG = useRef<SVGGElement>(null);
@@ -224,219 +177,203 @@ export const Map = (props: Props) => {
   return (
     <RootEl>
       {
-      mapWidth && mapHeight ? (
-        <>
-          <div id='graph-node' ref={GraphRef}>
-            <svg width={mapWidth} height={mapHeight + 10} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
-              <rect
-                x={0}
-                y={0}
-                width={mapWidth * (height / mapHeight)}
-                height={mapHeight * (width / mapWidth)}
-                transform={`translate(${((mapWidth * (height / mapHeight)) - width) / 2},${((mapHeight * (width / mapWidth)) - height) / 2})`}
-                fill='#fff'
-                fillOpacity={0}
-                onClick={() => {
-                  updateCountry('World');
-                  updateISO3('');
-                }}
-              />
-              <g ref={mapG}>
+        mapWidth && mapHeight ? (
+          <>
+            <div id='graph-node' ref={GraphRef}>
+              <InfoPanelEl className='undp-scrollbar'>
                 {
-                  map.features.map((d: any, i: any) => {
-                    if (d.properties.NAME === 'Antarctica') return null;
-                    return (
-                      <g
-                        key={i}
-                        className={d.properties.ISO3}
-                        onClick={() => {
-                          if (d.properties.ISO3 === ISO3) {
-                            updateCountry('World');
-                            updateISO3('');
-                          } else {
-                            const indx = data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3);
-                            if (indx !== -1) {
-                              updateCountry(d.properties.NAME);
-                              updateISO3(d.properties.ISO3);
+                  Country !== 'World' ? <button onClick={() => { updateCountry('World'); updateISO3(''); }} type='button' className='undp-button button-tertiary' style={{ marginLeft: 'var(--spacing-05)', paddingBottom: 0, fontSize: '0.75rem' }}>← Back to Global View</button> : null
+                }
+                <h4 style={{ margin: 'var(--spacing-05)' }}>
+                  {Country}
+                </h4>
+                <hr className='undp-style margin-bottom-00' />
+                <SideBarBody data={data} />
+              </InfoPanelEl>
+              <svg width={mapWidth} height={mapHeight + 10} viewBox={`0 0 ${width} ${height}`} ref={mapSvg}>
+                <rect
+                  x={0}
+                  y={0}
+                  width={mapWidth * (height / mapHeight)}
+                  height={mapHeight * (width / mapWidth)}
+                  transform={`translate(${((mapWidth * (height / mapHeight)) - width) / 2},${((mapHeight * (width / mapWidth)) - height) / 2})`}
+                  fill='#fff'
+                  fillOpacity={0}
+                  onClick={() => {
+                    updateCountry('World');
+                    updateISO3('');
+                  }}
+                />
+                <g ref={mapG}>
+                  {
+                    map.features.map((d: any, i: any) => {
+                      if (d.properties.NAME === 'Antarctica') return null;
+                      return (
+                        <g
+                          key={i}
+                          className={d.properties.ISO3}
+                          onClick={() => {
+                            if (d.properties.ISO3 === ISO3) {
+                              updateCountry('World');
+                              updateISO3('');
+                            } else {
+                              const indx = data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3);
+                              if (indx !== -1) {
+                                updateCountry(d.properties.NAME);
+                                updateISO3(d.properties.ISO3);
+                              }
                             }
-                          }
-                        }}
-                        onMouseEnter={(event) => {
-                          setHoverData({
-                            country: d.properties.NAME,
-                            xPosition: event.clientX,
-                            yPosition: event.clientY,
-                            indicator: Indicator,
-                            year: Year,
-                            data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
-                          });
-                        }}
-                        onMouseMove={(event) => {
-                          setHoverData({
-                            country: d.properties.NAME,
-                            xPosition: event.clientX,
-                            yPosition: event.clientY,
-                            indicator: Indicator,
-                            year: Year,
-                            data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
-                          });
-                        }}
-                        onMouseLeave={() => {
-                          setHoverData(undefined);
-                        }}
-                      >
-                        {
-                        d.properties.NAME === 'Antarctica' ? null
-                          : d.geometry.type === 'MultiPolygon' ? d.geometry.coordinates.map((el:any, j: any) => {
-                            let masterPath = '';
-                            el.forEach((geo: number[][]) => {
-                              let path = ' M';
-                              geo.forEach((c: number[], k: number) => {
+                          }}
+                          onMouseEnter={(event) => {
+                            setHoverData({
+                              country: d.properties.NAME,
+                              xPosition: event.clientX,
+                              yPosition: event.clientY,
+                              indicator: Indicator,
+                              year: Year,
+                              data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
+                            });
+                          }}
+                          onMouseMove={(event) => {
+                            setHoverData({
+                              country: d.properties.NAME,
+                              xPosition: event.clientX,
+                              yPosition: event.clientY,
+                              indicator: Indicator,
+                              year: Year,
+                              data: data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3) === -1 ? undefined : data[data.findIndex((el) => el.ISOAlpha3 === d.properties.ISO3)],
+                            });
+                          }}
+                          onMouseLeave={() => {
+                            setHoverData(undefined);
+                          }}
+                        >
+                          {
+                          d.properties.NAME === 'Antarctica' ? null
+                            : d.geometry.type === 'MultiPolygon' ? d.geometry.coordinates.map((el:any, j: any) => {
+                              let masterPath = '';
+                              el.forEach((geo: number[][]) => {
+                                let path = ' M';
+                                geo.forEach((c: number[], k: number) => {
+                                  const point = projection([c[0], c[1]]) as [number, number];
+                                  if (k !== geo.length - 1) path = `${path}${point[0]} ${point[1]}L`;
+                                  else path = `${path}${point[0]} ${point[1]}`;
+                                });
+                                masterPath += path;
+                              });
+                              return (
+                                <path
+                                  key={j}
+                                  opacity={hoverData
+                                    ? hoverData.country === d.properties.NAME ? 1 : 0.2
+                                    : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
+                                      : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
+                                  d={masterPath}
+                                  className='streetPath'
+                                  stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
+                                  strokeWidth={0.5}
+                                  fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
+                                />
+                              );
+                            }) : d.geometry.coordinates.map((el:any, j: number) => {
+                              let path = 'M';
+                              el.forEach((c: number[], k: number) => {
                                 const point = projection([c[0], c[1]]) as [number, number];
-                                if (k !== geo.length - 1) path = `${path}${point[0]} ${point[1]}L`;
+                                if (k !== el.length - 1) path = `${path}${point[0]} ${point[1]}L`;
                                 else path = `${path}${point[0]} ${point[1]}`;
                               });
-                              masterPath += path;
-                            });
-                            return (
-                              <path
-                                key={j}
-                                opacity={hoverData
-                                  ? hoverData.country === d.properties.NAME ? 1 : 0.2
-                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
-                                    : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
-                                d={masterPath}
-                                className='streetPath'
-                                stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
-                                strokeWidth={0.5}
-                                fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
-                              />
-                            );
-                          }) : d.geometry.coordinates.map((el:any, j: number) => {
-                            let path = 'M';
-                            el.forEach((c: number[], k: number) => {
-                              const point = projection([c[0], c[1]]) as [number, number];
-                              if (k !== el.length - 1) path = `${path}${point[0]} ${point[1]}L`;
-                              else path = `${path}${point[0]} ${point[1]}`;
-                            });
-                            return (
-                              <path
-                                key={j}
-                                opacity={hoverData
-                                  ? hoverData.country === d.properties.NAME ? 1 : 0.2
-                                  : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
-                                    : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
-                                d={path}
-                                className='streetPath'
-                                stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
-                                strokeWidth={0.5}
-                                fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
-                              />
-                            );
-                          })
-                      }
-                      </g>
-                    );
-                  })
-                }
-              </g>
-            </svg>
-            {
-              ISO3 !== ''
-                ? (
-                  <ButtonEl type='button' onClick={() => { updateCountry('World'); updateISO3(''); }}><span className='bold'>Back To World</span></ButtonEl>
-                ) : null
-
-            }
-            <ColorScaleEl marginTop={colorSettingVisible ? '-22rem' : '-14.32rem'}>
-              <TitleEl>
-                <div>Color Settings</div>
-                <Button type='button' onClick={() => { setColorSettingVisible(!colorSettingVisible); }}>
-                  {
-                    colorSettingVisible ? <ArrowDown size={24} /> : <ArrowUp size={24} />
+                              return (
+                                <path
+                                  key={j}
+                                  opacity={hoverData
+                                    ? hoverData.country === d.properties.NAME ? 1 : 0.2
+                                    : colorKeyHover ? colorScale(getValue(d.properties.ISO3, Year, Indicator, data)) === colorKeyHover ? 1 : 0.2
+                                      : Country === 'World' || ISO3 === d.properties.ISO3 ? 1 : 0.2}
+                                  d={path}
+                                  className='streetPath'
+                                  stroke={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#DADADA' : '#FFF'}
+                                  strokeWidth={0.5}
+                                  fill={getValue(d.properties.ISO3, Year, Indicator, data) === -1 ? '#FAFAFA' : colorScale(getValue(d.properties.ISO3, Year, Indicator, data))}
+                                />
+                              );
+                            })
+                        }
+                        </g>
+                      );
+                    })
                   }
-                </Button>
-              </TitleEl>
-              {
-                colorSettingVisible
-                  ? (
-                    <OptionContainerEl>
-                      <OptionEl onClick={() => { updateIndicator('b40T10RatioWID'); }}>
-                        <RadioEl>
-                          {' '}
-                          <RadioIcon selected={Indicator === 'b40T10RatioWID'} />
-                          {' '}
-                        </RadioEl>
-                        <>Income Share Ratio: Bottom 40% / Top 10%</>
-                      </OptionEl>
-                      <OptionEl onClick={() => { updateIndicator('bottom40WID'); }}>
-                        <RadioEl>
-                          {' '}
-                          <RadioIcon selected={Indicator === 'bottom40WID'} />
-                          {' '}
-                        </RadioEl>
-                        <>Income Share: Bottom 40%</>
-                      </OptionEl>
-                      <OptionEl onClick={() => { updateIndicator('top10WID'); }}>
-                        <RadioEl>
-                          {' '}
-                          <RadioIcon selected={Indicator === 'top10WID'} />
-                          {' '}
-                        </RadioEl>
-                        <>Income Share: Top 10%</>
-                      </OptionEl>
-                    </OptionContainerEl>
-                  )
-                  : null
-              }
-              <ColorHelpEl>
-                <div>
-                  ←
-                  {' '}
-                  {Indicator === 'b40T10RatioWID' ? 'Higher Inequality' : 'Lower Income Share'}
+                </g>
+              </svg>
+              <ColorScaleEl marginTop={colorSettingVisible ? '-17rem' : '-10.25rem'}>
+                <div className='flex-div flex-space-between flex-vert-aling-center margin-bottom-05'>
+                  <div className='bold'>Color Settings</div>
+                  <Button type='button' onClick={() => { setColorSettingVisible(!colorSettingVisible); }}>
+                    {
+                      colorSettingVisible ? <ArrowDown size={24} /> : <ArrowUp size={24} />
+                    }
+                  </Button>
                 </div>
-                <div>
-                  {Indicator === 'b40T10RatioWID' ? 'Lower Inequality' : 'Higher Income Share'}
-                  {' '}
-                  →
-                </div>
-              </ColorHelpEl>
-              <FlexDiv>
                 {
-                  array.map((d, i) => (
-                    <ColorKeyEl
-                      key={i}
-                      onMouseEnter={() => {
-                        setColorKeyHover(Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]);
-                      }}
-                      onMouseLeave={() => {
-                        setColorKeyHover(undefined);
-                      }}
-                    >
-                      <ColorKeyRect
-                        fill={Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]}
-                      />
-                      <KeyValue>
-                        {d}
-                      </KeyValue>
-                    </ColorKeyEl>
-                  ))
+                  colorSettingVisible
+                    ? (
+                      <Radio.Group defaultValue='b40T10RatioWID' onChange={(el) => { updateIndicator(el.target.value); }}>
+                        <Space direction='vertical'>
+                          <Radio className='undp-radio' value='b40T10RatioWID'>Income Share Ratio: Bottom 40% / Top 10%</Radio>
+                          <Radio className='undp-radio' value='bottom40WID'>Income Share: Bottom 40%</Radio>
+                          <Radio className='undp-radio' value='top10WID'>Income Share: Top 10%</Radio>
+                        </Space>
+                      </Radio.Group>
+                    )
+                    : null
                 }
-              </FlexDiv>
-            </ColorScaleEl>
-          </div>
-          {
-            hoverData
-              ? (
-                <Tooltip
-                  data={hoverData}
-                />
-              )
-              : null
-          }
-        </>
-      ) : null
-}
+                <ColorHelpEl>
+                  <div>
+                    ←
+                    {' '}
+                    {Indicator === 'b40T10RatioWID' ? 'Higher Inequality' : 'Lower Income Share'}
+                  </div>
+                  <div>
+                    {Indicator === 'b40T10RatioWID' ? 'Lower Inequality' : 'Higher Income Share'}
+                    {' '}
+                    →
+                  </div>
+                </ColorHelpEl>
+                <FlexDiv>
+                  {
+                    array.map((d, i) => (
+                      <ColorKeyEl
+                        key={i}
+                        onMouseEnter={() => {
+                          setColorKeyHover(Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]);
+                        }}
+                        onMouseLeave={() => {
+                          setColorKeyHover(undefined);
+                        }}
+                      >
+                        <ColorKeyRect
+                          fill={Indicator === 'top10WID' ? REDCOLORSCALE[i] : Indicator === 'b40T10RatioWID' ? REDFLIPPEDCOLORSCALE[i] : GREENCOLORSCALE[i]}
+                        />
+                        <KeyValue>
+                          {d}
+                        </KeyValue>
+                      </ColorKeyEl>
+                    ))
+                  }
+                </FlexDiv>
+              </ColorScaleEl>
+            </div>
+            {
+              hoverData
+                ? (
+                  <Tooltip
+                    data={hoverData}
+                  />
+                )
+                : null
+            }
+          </>
+        ) : null
+      }
     </RootEl>
   );
 };

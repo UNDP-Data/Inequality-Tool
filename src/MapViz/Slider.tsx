@@ -1,11 +1,13 @@
 import {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import ReactSlider from 'react-slider';
 import styled from 'styled-components';
+import { Slider } from 'antd';
 import Context from '../Context/Context';
 import { PauseIcon, PlayIcon } from '../icons';
 import { CtxDataType, YearListDataType } from '../Types';
+
+import '../style/sliderStyle.css';
 
 interface Props {
   years: YearListDataType[];
@@ -13,62 +15,28 @@ interface Props {
 
 const TimeSliderUnitEl = styled.div`
   display: flex;
+  gap: var(--spacing-05);
   align-items: center;
-  font-size: 1.4rem;
-  color: var(--grey);
-  box-shadow: var(--shadow-top);
   padding: 1rem;
   position: relative;
-  background-color: var(--blue-very-light);
+  background-color: var(--gray-300);
 `;
 
 const IconEl = styled.div`
   cursor: pointer;
-  height: 2.4rem;
+  height: 1.5rem;
   margin-right: 0.4rem;
-  margin-top: -2px;
 `;
 
-const YearsEl = styled.div`
-  margin: 0.2rem 1rem 0 1rem;
-  color: var(--black-550);
-`;
-
-const StyledThumb = styled.div`
-  padding: 0.1rem 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-  background-color: #fff;
-  color: var(--blue-medium);
-  font-weight: bold;
-  box-shadow: var(--shadow);
-  border-radius: 2rem;
-  border: 1px solid var(--blue-medium);
-  cursor: grab;
-  margin-top: 0.9rem;
-`;
-
-const Thumb = (props: any, state: any) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  const val = state.valueNow;
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledThumb {...props}>
-      {val}
-    </StyledThumb>
-  );
-};
-
-export const Slider = (props: Props) => {
+export const SliderEl = (props: Props) => {
   const {
     years,
   } = props;
-
   const [play, setPlay] = useState(false);
   const [year, setYear] = useState(2021);
   const {
-    Year,
     updateYear,
+    Year,
   } = useContext(Context) as CtxDataType;
   // eslint-disable-next-line no-undef
   const timer: { current: NodeJS.Timeout | null } = useRef(null);
@@ -90,22 +58,23 @@ export const Slider = (props: Props) => {
       <IconEl onClick={() => { setPlay(!play); }}>
         {
         play
-          ? <PauseIcon size={24} color='#018EFF' />
-          : <PlayIcon size={24} color='#018EFF' />
+          ? <PauseIcon size={24} color='#D12800' />
+          : <PlayIcon size={24} color='#D12800' />
       }
       </IconEl>
-      <YearsEl>{years[0].label}</YearsEl>
-      <ReactSlider
+      <p style={{ fontSize: '1rem' }}>{years[0].label}</p>
+      <Slider
+        className='undp-slider'
+        defaultValue={years[years.length - 1].label}
+        value={Year}
         min={years[0].label}
         max={years[years.length - 1].label}
         step={1}
-        value={Year}
-        className='horizontal-slider'
-        trackClassName='year-slider-track'
-        renderThumb={Thumb}
+        style={{ width: '97%', margin: '0 auto' }}
         onChange={(d) => { setYear(d); }}
+        tooltip={{ open: true }}
       />
-      <YearsEl>{years[years.length - 1].label}</YearsEl>
+      <p style={{ fontSize: '1rem' }}>{years[years.length - 1].label}</p>
     </TimeSliderUnitEl>
   );
 };

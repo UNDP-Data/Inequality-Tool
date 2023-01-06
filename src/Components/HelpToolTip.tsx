@@ -16,10 +16,9 @@ const TooltipEl = styled.div<TooltipElProps>`
   display: block;
   position: fixed;
   z-index: 10;
-  padding: 1rem;
+  padding: 0.875rem;
   border-radius: 2px;
-  font-size: 1.4rem;
-  line-height: 2.2rem;
+  font-size: 0.875rem;
   background-color: var(--white);
   box-shadow: var(--shadow);
   max-width: 24rem;

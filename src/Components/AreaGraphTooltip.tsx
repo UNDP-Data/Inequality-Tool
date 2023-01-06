@@ -8,47 +8,21 @@ interface Props {
 interface TooltipElProps {
   x: number;
   y: number;
+  verticalAlignment: string;
+  horizontalAlignment: string;
 }
 
 const TooltipEl = styled.div<TooltipElProps>`
   display: block;
   position: fixed;
-  z-index: 10000;
-  border-radius: 1rem;
-  font-size: 1.4rem;
-  background-color: var(--white);
-  box-shadow: var(--shadow);
+  z-index: 200;
+  background-color: var(--gray-200);
+  border: 1px solid var(--gray-300);
   word-wrap: break-word;
-  top: ${(props) => props.y - 40}px;
-  left: ${(props) => props.x + 20}px;
-  width: 20rem;
-`;
-
-const TooltipTitle = styled.div`
-  color: var(--white);  
-  background: var(--blue-medium);
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  position: relative;
-  font-weight: 700;
-  font-size: 1.6rem;
-  line-height: 2.4rem;
-`;
-
-const TooltipBody = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  font-size: 1.4rem;
-  line-height: 2rem;
-  color: var(--grey);
-`;
-
-const TooltipHead = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  top: ${(props) => (props.verticalAlignment === 'bottom' ? props.y - 40 : props.y + 40)}px;
+  left: ${(props) => (props.horizontalAlignment === 'left' ? props.x - 20 : props.x + 20)}px;
+  max-width: 15rem;
+  transform: ${(props) => `translate(${props.horizontalAlignment === 'left' ? '-100%' : '0%'},${props.verticalAlignment === 'top' ? '-100%' : '0%'})`};
 `;
 
 interface RowElProps {
@@ -58,7 +32,8 @@ interface RowElProps {
 const RowEl = styled.div<RowElProps>`
   display: flex;
   justify-content: space-between;
-  margin: 1rem 0;
+  margin: 0.875rem 0;
+  font-size: 0.875rem;
   color: ${(props) => (props.color ? props.color : 'var(--navy)')};
   &:last-of-type {
     margin-bottom: 0;
@@ -68,18 +43,19 @@ const RowEl = styled.div<RowElProps>`
 export const Tooltip = (props: Props) => {
   const { data } = props;
   return (
-    <TooltipEl x={data.xPosition > window.innerWidth / 2 ? data.xPosition - 240 : data.xPosition} y={data.yPosition}>
-      <TooltipHead>
-        <TooltipTitle>
+    <TooltipEl x={data.xPosition} y={data.yPosition} verticalAlignment={data.yPosition > window.innerHeight / 2 ? 'top' : 'bottom'} horizontalAlignment={data.xPosition > window.innerWidth / 2 ? 'left' : 'right'}>
+      <div className='flex-div flex-wrap' style={{ padding: 'var(--spacing-05)', alignItems: 'baseline' }}>
+        <h6 className='undp-typography bold margin-bottom-00' style={{ color: 'var(--blue-600)' }}>
           {data.country}
-        </TooltipTitle>
-      </TooltipHead>
-      <TooltipBody>
-        <div>
+        </h6>
+      </div>
+      <hr className='undp-style margin-top-00 margin-bottom-00' />
+      <div style={{ padding: 'var(--spacing-05)' }}>
+        <p style={{ fontSize: '0.875rem', margin: 0 }}>
           Income Share For
           {' '}
           <span className='bold'>{data.year}</span>
-        </div>
+        </p>
         <RowEl color='#266291'>
           <div>Top 10%</div>
           <div className='bold'>
@@ -101,7 +77,7 @@ export const Tooltip = (props: Props) => {
             %
           </div>
         </RowEl>
-      </TooltipBody>
+      </div>
     </TooltipEl>
   );
 };

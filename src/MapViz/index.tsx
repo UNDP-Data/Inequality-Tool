@@ -2,14 +2,16 @@ import {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import styled from 'styled-components';
-import Select from 'react-dropdown-select';
+import { Select } from 'antd';
 import { CtxDataType, DataType, YearListDataType } from '../Types';
-import { CaretDown } from '../icons';
 import { Map } from './Map';
-import { SideBarBody } from './SideBarBody';
 import { AreaGraph } from './AreaGraph';
 import Context from '../Context/Context';
-import { Slider } from './Slider';
+import { SliderEl } from './Slider';
+import { WorldBoxesOnTop } from './WorldBoxesOnTop';
+import { CountryBoxesOnTop } from './CountryBoxesOnTop';
+
+import '../style/selectStyle.css';
 
 interface Props {
   years: YearListDataType[];
@@ -18,9 +20,8 @@ interface Props {
 }
 
 const MapEl = styled.div`
-  width: 75%;
-  background-color: var(--blue-very-light);
-  max-height: 64rem;
+  width: 100%;
+  height: 50rem;
   @media (max-width: 960px) {
     width: 100%;
     height: calc(640 * (100vw - 40px) / 960);
@@ -31,83 +32,11 @@ const MapEl = styled.div`
   }
 `;
 
-const FlexDiv = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: -0.5rem;
-`;
-
 const VizContainer = styled.div`
-  display: flex;
-  justify-content: space-between; 
-  box-shadow: var(--shadow);
+  background-color: var(--gray-200);
   @media (max-width: 960px) {
     flex-wrap: wrap;
   }
-`;
-
-const CaretIconEl = styled.div`
-  cursor: pointer;
-  height: 2.4rem;
-  margin-right: 0.4rem;
-  margin-left: -1.8rem;
-  margin-top: -2px;
-`;
-
-const SideBarEl = styled.div`
-  font-size: 2rem;
-  line-height: 3rem;
-  color: var(--black);
-  width: 25%;
-  background-color: var(--white);
-  box-shadow: var(--shadow-right);
-  z-index: 5;
-  padding-top: 1rem;
-  position: relative;
-  height: 64rem;
-  overflow: auto;
-
-  ::-webkit-scrollbar {
-    width: 0.5rem;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: var(--black-100); 
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: var(--black-500);
-    border-radius: 2rem; 
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--black-550);
-  }
-  @media (max-width: 960px) {
-    width: 100%;
-    height: auto;
-    box-shadow: var(--shadow-bottom);
-  }
-`;
-
-const HeaderTextEl = styled.div`
-  margin-right: 1rem;
-  color: var(--black-600);
-`;
-
-const HeaderEl = styled.div`
-  background-color: var(--white);
-  padding:1.5rem 1rem 1rem 1rem;
-  box-shadow: var(--shadow-bottom);
-  border-bottom: 1px solid var(--black-400);
-  font-size: 2.4rem;
-  font-weight: bold;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
 `;
 
 const AreaGraphContainer = styled.div`
@@ -115,7 +44,6 @@ const AreaGraphContainer = styled.div`
   @media (max-width: 960px) {
     display: block;
     padding: 1rem 1rem 2rem 1rem;
-    background-color: var(--blue-very-light);
     border-top: 1px solid var(--black);
   }
 `;
@@ -152,60 +80,39 @@ export const MapViz = (props: Props) => {
 
   return (
     <RootEl>
-      <HeaderEl>
-        <HeaderTextEl>
+      <div className='flex-div flex-vert-align-center gap-04 flex-wrap margin-bottom-07'>
+        <h3 className='undp-typography margin-bottom-00'>
           Income Shares for
           {Country === 'World' ? ' the' : null}
-        </HeaderTextEl>
-        <FlexDiv>
-          <Select
-            options={countryList}
-            className='countrySelect'
-            onChange={(el: any) => { updateCountry(el[0].label); updateISO3(el[0].ISOCode); }}
-            values={
-                [
-                  {
-                    label: Country,
-                    ISOCode: ISO3,
-                  },
-                ]
-              }
-            labelField='label'
-            valueField='label'
-            dropdownHeight='250px'
-            dropdownPosition='auto'
-            searchable={false}
-            dropdownGap={2}
-          />
-          <CaretIconEl>
-            <CaretDown size={24} color='#018EFF' />
-          </CaretIconEl>
-        </FlexDiv>
-        <HeaderTextEl>
+        </h3>
+        <Select
+          className='undp-select undp-select-inline'
+          value={Country}
+          style={{ width: 'auto' }}
+          onChange={(el) => { updateCountry(el); updateISO3(countryList[countryList.findIndex((d) => d.label === el)].ISOCode); }}
+        >
+          {
+            countryList.map((d, i) => <Select.Option className='undp-select-option' key={i} value={d.label}>{d.label}</Select.Option>)
+          }
+        </Select>
+        <h3 className='undp-typography margin-bottom-00'>
           in
-        </HeaderTextEl>
-        <FlexDiv>
-          <Select
-            options={years}
-            className='countrySelect'
-            onChange={(el: any) => { updateYear(el[0].label); }}
-            values={[{ label: Year }]}
-            labelField='label'
-            valueField='label'
-            dropdownHeight='250px'
-            dropdownPosition='auto'
-            searchable={false}
-            dropdownGap={2}
-          />
-          <CaretIconEl>
-            <CaretDown size={24} color='#018EFF' />
-          </CaretIconEl>
-        </FlexDiv>
-      </HeaderEl>
-      <VizContainer>
-        <SideBarEl>
-          <SideBarBody data={data} />
-        </SideBarEl>
+        </h3>
+        <Select
+          className='undp-select undp-select-inline'
+          value={Year}
+          style={{ width: 'auto' }}
+          onChange={(el) => { updateYear(el); }}
+        >
+          {
+            years.map((d, i) => <Select.Option className='undp-select-option' key={i} value={d.label}>{d.label}</Select.Option>)
+          }
+        </Select>
+      </div>
+      {
+        Country === 'World' ? <WorldBoxesOnTop data={data} /> : <CountryBoxesOnTop data={data} />
+      }
+      <VizContainer className='flex-div flex-space-between'>
         <MapEl ref={mapRef}>
           <Map
             data={data}
@@ -224,7 +131,7 @@ export const MapViz = (props: Props) => {
           </AreaGraphContainer>
         ) : null
       }
-      <Slider
+      <SliderEl
         years={years}
       />
     </RootEl>

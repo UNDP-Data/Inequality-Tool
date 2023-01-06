@@ -1,9 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
-import meanBy from 'lodash.meanby';
 import sortBy from 'lodash.sortby';
 import { CtxDataType, DataType } from '../Types';
-import { SideBarCard } from '../Components/SideBarCard';
 import { SideBarCardTable } from '../Components/SideBarCardTable';
 import Context from '../Context/Context';
 
@@ -47,29 +45,10 @@ export const WorldSideBar = (props: Props) => {
     Indicator,
   } = useContext(Context) as CtxDataType;
   const filteredData = data.filter((d) => d.data.findIndex((el) => el.year === Year) !== -1);
-  const meanRatio = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].b40T10RatioWID);
-  const meanBottom40 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].bottom40WID);
-  const meanTop10 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].top10WID);
   const sortedData = Indicator === 'top10WID' ? sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)][Indicator]) : sortBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)][Indicator]).reverse();
   return (
     <>
       <CardsContainerEl>
-        <SideBarCard
-          title='Income Share: Bottom 40%'
-          titleSubNote={`Avg. of ${filteredData.length} countries`}
-          value={`${(meanBottom40 * 100).toFixed(1)}%`}
-        />
-        <SideBarCard
-          title='Income Share: Top 10%'
-          titleSubNote={`Avg. of ${filteredData.length} countries`}
-          value={`${(meanTop10 * 100).toFixed(1)}%`}
-        />
-        <SideBarCard
-          title='Income Share Ratio'
-          tooltip
-          titleSubNote={`Bottom 40% / Top 10%, Avg. of ${filteredData.length} countries`}
-          value={`${(meanRatio).toFixed(3)}`}
-        />
         <TableEl>
           <SideBarCardTable
             title={`Countries Ranked by ${Indicator === 'b40T10RatioWID' ? 'Bottom 40% / Top 10% Income Share Ratio' : Indicator === 'bottom40WID' ? 'Bottom 40% Income Share' : 'Top 10% Income Share'}`}

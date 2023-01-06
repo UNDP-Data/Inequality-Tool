@@ -12,43 +12,15 @@ interface Props {
   fullScreen?: boolean;
 }
 
-const LegendContainerEl = styled.div`
-  display: flex;
-`;
-
-const LegendEl = styled.div`
-  display: flex;
-  margin-right: 2rem;
-  align-items: center;
-  font-size: 1.4rem;
-  line-height: 1.4rem;
-  color: var(--black-550);
-`;
-
 interface LegendColorProps {
   color: string;
 }
 
 const LegendColor = styled.div<LegendColorProps>`
   background-color: ${(props) => props.color};
-  width: 1rem;
-  height: 1rem;
-  margin-top: -3px;
+  width: 0.75rem;
+  height: 0.75rem;
   border-radius: 1rem;
-  margin-right: 0.5rem;
-`;
-
-interface FullScreeProps {
-  isFullscreen?: boolean;
-}
-
-const TitleEl = styled.div<FullScreeProps>`
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--blue-medium);
-  line-height: 1.6rem;
-  margin: ${(props) => (props.isFullscreen ? '0 0 1rem 0' : '1.5rem 0 1rem 0')};
 `;
 
 export const AreaGraph = (props: Props) => {
@@ -82,17 +54,17 @@ export const AreaGraph = (props: Props) => {
   const yTicks = y.ticks(3);
   return (
     <>
-      <TitleEl isFullscreen={fullScreen}>Change Over Time</TitleEl>
-      <LegendContainerEl>
-        <LegendEl>
+      <h6 className='undp-typography margin-top-07 flex-vert-align-center'>Change Over Time</h6>
+      <div className='flex-div flex-wrap gap-05 flex-vert-align-center'>
+        <div className='flex-div gap-02 flex-vert-align-center'>
           <LegendColor color='#E26B8D' />
-          <div>Bottom 40%</div>
-        </LegendEl>
-        <LegendEl>
+          <p style={{ fontSize: '0.875rem', margin: 0 }}>Bottom 40%</p>
+        </div>
+        <div className='flex-div gap-02 flex-vert-align-center'>
           <LegendColor color='#266291' />
-          <div>Top 10%</div>
-        </LegendEl>
-      </LegendContainerEl>
+          <p style={{ fontSize: '0.875rem', margin: 0 }}>Top 10%</p>
+        </div>
+      </div>
       <svg style={{ width: '100%' }} viewBox={`0 0 ${graphWidth + marginLeft + marginRight} ${graphHeight + marginTop + marginBottom}`}>
         <g>
           <path d={areaShape(data.data as any) as string} fill='#0969FA' opacity={0.05} />

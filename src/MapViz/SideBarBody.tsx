@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { useContext } from 'react';
 import { CountrySideBar } from './CountrySideBar';
 import { WorldSideBar } from './WorldSideBar';
@@ -9,15 +8,6 @@ interface Props {
   data: DataType[];
 }
 
-const El = styled.div`
-  padding:0 1rem;
-  font-size: 1.6rem;
-  font-weight: normal;
-  color: var(--black);
-  border-top: 1px solid var(--grey-c3);
-  margin-top: 0.5rem;
-`;
-
 export const SideBarBody = (props: Props) => {
   const {
     data,
@@ -27,7 +17,7 @@ export const SideBarBody = (props: Props) => {
     ISO3,
   } = useContext(Context) as CtxDataType;
   return (
-    <El>
+    <>
       {
         Country === 'World'
           ? <WorldSideBar data={data} />
@@ -43,6 +33,6 @@ export const SideBarBody = (props: Props) => {
               </>
             )
       }
-    </El>
+    </>
   );
 };

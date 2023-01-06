@@ -10,59 +10,25 @@ interface Props {
 interface TooltipElProps {
   x: number;
   y: number;
+  verticalAlignment: string;
+  horizontalAlignment: string;
 }
 
 const TooltipEl = styled.div<TooltipElProps>`
   display: block;
   position: fixed;
-  z-index: 10000;
-  border-radius: 1rem;
-  font-size: 1.4rem;
-  background-color: var(--white);
-  box-shadow: var(--shadow);
+  z-index: 200;
+  background-color: var(--gray-200);
+  border: 1px solid var(--gray-300);
   word-wrap: break-word;
-  top: ${(props) => props.y - 40}px;
-  left: ${(props) => props.x + 20}px;
-  width: 20rem;
-`;
-
-const TooltipTitle = styled.div`
-  color: var(--white);  
-  background: var(--blue-medium);
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  position: relative;
-  font-weight: 700;
-  font-size: 2rem;
-  line-height: 2.4rem;
-  border-radius: 1rem 1rem 0 0;
-`;
-
-const TooltipBody = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 1rem;
-  font-weight: normal;
-  font-size: 1.4rem;
-  line-height: 2rem;
-  color: var(--black);
-`;
-
-const TooltipHead = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  top: ${(props) => (props.verticalAlignment === 'bottom' ? props.y - 40 : props.y + 40)}px;
+  left: ${(props) => (props.horizontalAlignment === 'left' ? props.x - 20 : props.x + 20)}px;
+  max-width: 15rem;
+  transform: ${(props) => `translate(${props.horizontalAlignment === 'left' ? '-100%' : '0%'},${props.verticalAlignment === 'top' ? '-100%' : '0%'})`};
 `;
 
 const TimelineEl = styled.div`
   margin-top: 0.5rem;
-`;
-
-const TimelineElTitle = styled.div`
-  font-size: 1.4rem;
-  color: var(--black-700);
-  font-weight: bold;
 `;
 
 interface HighlightedProps {
@@ -72,18 +38,13 @@ interface HighlightedProps {
 const Span = styled.span<HighlightedProps>`
   font-weight: ${(props) => (props.isHighlighted ? 'bold' : 'normal')};
   font-style: ${(props) => (props.isHighlighted ? 'normal' : 'italic')};
-  color: ${(props) => (props.isHighlighted ? 'var(--primary-blue)' : 'var(--black-700)')};
-`;
-
-const SubNote = styled.div`
-  font-style: italic;
-  color: var(--black-550);
+  color: ${(props) => (props.isHighlighted ? 'var(--blue-600)' : 'var(--gray-700)')};
 `;
 
 export const Tooltip = (props: Props) => {
   const { data } = props;
-  const graphWidth = 125;
-  const height = 50;
+  const graphWidth = 165;
+  const height = 75;
   const marginLeft = 20;
   const marginBottom = 10;
   const marginTop = 10;
@@ -93,14 +54,15 @@ export const Tooltip = (props: Props) => {
   const yScale = scaleLinear().domain([0, max === 1 ? 1 : max[data.indicator]]).range([0, height]).nice();
   const yTicks = yScale.ticks(3);
   return (
-    <TooltipEl x={data.xPosition > window.innerWidth / 2 ? data.xPosition - 240 : data.xPosition} y={data.yPosition}>
-      <TooltipHead>
-        <TooltipTitle>
+    <TooltipEl x={data.xPosition} y={data.yPosition} verticalAlignment={data.yPosition > window.innerHeight / 2 ? 'top' : 'bottom'} horizontalAlignment={data.xPosition > window.innerWidth / 2 ? 'left' : 'right'}>
+      <div className='flex-div flex-wrap' style={{ padding: 'var(--spacing-05)', alignItems: 'baseline' }}>
+        <h6 className='undp-typography bold margin-bottom-00' style={{ color: 'var(--blue-600)' }}>
           {data.country}
-        </TooltipTitle>
-      </TooltipHead>
-      <TooltipBody>
-        <div>
+        </h6>
+      </div>
+      <hr className='undp-style margin-top-00 margin-bottom-00' />
+      <div style={{ padding: 'var(--spacing-05) var(--spacing-05) 0 var(--spacing-05)' }}>
+        <p className='margin-top-00 margin-bottom-00' style={{ fontSize: '1rem' }}>
           {indicatorText}
           {' '}
           {
@@ -124,12 +86,12 @@ export const Tooltip = (props: Props) => {
               : 'Not Available'
           }
           </Span>
-        </div>
+        </p>
         {
           data.data && arraySize
             ? (
               <TimelineEl>
-                <TimelineElTitle>Change Over Time</TimelineElTitle>
+                <h6 className='undp-typography margin-bottom-00 margin-top-05'>Change Over Time</h6>
                 <svg width={graphWidth + marginLeft} height={height + marginBottom + marginTop}>
                   <g>
                     {yTicks.map((d, i) => (
@@ -177,12 +139,12 @@ export const Tooltip = (props: Props) => {
         {
           data.data && arraySize
             ? (
-              <SubNote>
+              <p className='italics small-font margin-top-00'>
                 Click to see more details
-              </SubNote>
+              </p>
             ) : null
         }
-      </TooltipBody>
+      </div>
     </TooltipEl>
   );
 };
