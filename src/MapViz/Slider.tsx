@@ -7,8 +7,6 @@ import Context from '../Context/Context';
 import { PauseIcon, PlayIcon } from '../icons';
 import { CtxDataType, YearListDataType } from '../Types';
 
-import '../style/sliderStyle.css';
-
 interface Props {
   years: YearListDataType[];
 }

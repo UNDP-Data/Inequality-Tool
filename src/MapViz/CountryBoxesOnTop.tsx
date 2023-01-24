@@ -23,7 +23,7 @@ export const CountryBoxesOnTop = (props: Props) => {
   const countryIndx = data.findIndex((d) => d.ISOAlpha3 === ISO3);
   const yearData = data[countryIndx].data.findIndex((d) => d.year === Year) !== -1 ? data[countryIndx].data[data[countryIndx].data.findIndex((d) => d.year === Year)] : undefined;
   return (
-    <div className='flex-div flex-wrap'>
+    <div className='stat-card-container margin-bottom-05'>
       <SideBarCard
         title='Income Share: Bottom 40%'
         value={yearData ? `${(yearData.bottom40WID * 100).toFixed(1)}%` : 'NA'}

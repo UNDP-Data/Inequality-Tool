@@ -16,9 +16,6 @@ import { getValue } from '../Utils/getValue';
 import { Tooltip } from '../Components/Tooltip';
 import { ArrowDown, ArrowUp } from '../icons';
 import Context from '../Context/Context';
-
-import '../style/radioStyle.css';
-import '../style/buttonStyle.css';
 import { SideBarBody } from './SideBarBody';
 
 interface Props {

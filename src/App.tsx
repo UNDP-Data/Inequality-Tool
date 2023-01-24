@@ -7,8 +7,6 @@ import { DumbellChartViz } from './DumbellChartViz';
 import Reducer from './Context/Reducer';
 import Context from './Context/Context';
 
-import './style/style.css';
-
 const App = () => {
   const [finalData, setFinalData] = useState<DataType[] | undefined>(undefined);
   const [years, setYears] = useState<YearListDataType[] | undefined>(undefined);
@@ -89,7 +87,7 @@ const App = () => {
       {
         finalData && years
           ? (
-            <div className='undp-container max-width-1440'>
+            <div className='undp-container max-width'>
               <Context.Provider
                 value={{
                   Country: state.Country,

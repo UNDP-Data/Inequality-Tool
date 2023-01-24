@@ -11,8 +11,6 @@ import { SliderEl } from './Slider';
 import { WorldBoxesOnTop } from './WorldBoxesOnTop';
 import { CountryBoxesOnTop } from './CountryBoxesOnTop';
 
-import '../style/selectStyle.css';
-
 interface Props {
   years: YearListDataType[];
   data: DataType[];

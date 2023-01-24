@@ -21,7 +21,7 @@ export const WorldBoxesOnTop = (props: Props) => {
   const meanBottom40 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].bottom40WID);
   const meanTop10 = meanBy(filteredData, (d) => d.data[d.data.findIndex((el) => el.year === Year)].top10WID);
   return (
-    <div className='flex-div flex-wrap'>
+    <div className='stat-card-container margin-bottom-05'>
       <SideBarCard
         title='Income Share: Bottom 40%'
         titleSubNote={`Avg. of ${filteredData.length} countries`}

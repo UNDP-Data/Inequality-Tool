@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { InfoIcon } from '../icons';
 import { HelpToolTip } from './HelpToolTip';
 
-import '../style/statCardStyle.css';
-
 interface Props {
     title: string;
     titleSubNote?: string;
@@ -15,9 +13,8 @@ interface Props {
 }
 
 const CardEl = styled.div`
-  @media (max-width: 960px) {
-    width: calc(33.33% - 1rem);
-  }
+  width: calc(33.33% - 4.667rem);
+  min-width: 20rem;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -36,7 +33,7 @@ export const SideBarCard = (props: Props) => {
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   return (
-    <CardEl className='stat-card margin-bottom-05'>
+    <CardEl className='stat-card'>
       <h3>
         {value}
       </h3>
