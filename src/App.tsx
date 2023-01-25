@@ -87,7 +87,7 @@ const App = () => {
       {
         finalData && years
           ? (
-            <div className='undp-container max-width'>
+            <div className='undp-container'>
               <Context.Provider
                 value={{
                   Country: state.Country,

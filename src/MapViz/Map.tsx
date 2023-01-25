@@ -36,7 +36,7 @@ const ColorScaleEl = styled.div<MarginProps>`
   padding: 1rem;
   border-radius: 0.2rem;
   background-color: rgba(255,255,255,0.8);
-  z-index: 10;
+  z-index: 5;
   position: relative;
   margin-right: 1rem;
   float: right;
@@ -100,7 +100,7 @@ const ColorHelpEl = styled.div`
 const InfoPanelEl = styled.div`
   margin-top: 1rem;
   background-color: rgba(255,255,255,0.8);
-  z-index: 10;
+  z-index: 5;
   position: absolute;
   left: 1rem;
   width: 17.5rem;

@@ -15,7 +15,7 @@ interface TooltipElProps {
 const TooltipEl = styled.div<TooltipElProps>`
   display: block;
   position: fixed;
-  z-index: 10;
+  z-index: 8;
   padding: 0.875rem;
   border-radius: 2px;
   font-size: 0.875rem;

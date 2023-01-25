@@ -23,7 +23,7 @@ const BannerEl = styled.div`
   text-align: center;
   font-weight: normal;
   position: absolute;
-  z-index: 100;
+  z-index: 6;
   @media (max-width: 960px) {
     font-size: 1.6rem;
     line-height: 2.2rem;
