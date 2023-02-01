@@ -53,7 +53,7 @@ export const AreaGraph = (props: Props) => {
     .curve(curveCardinal.tension(0.2));
   const yTicks = y.ticks(3);
   return (
-    <>
+    <div style={{ padding: '0 var(--spacing-05)' }}>
       <h6 className='undp-typography margin-top-07 flex-vert-align-center'>Change Over Time</h6>
       <div className='flex-div flex-wrap gap-05 flex-vert-align-center'>
         <div className='flex-div gap-02 flex-vert-align-center'>
@@ -241,6 +241,6 @@ export const AreaGraph = (props: Props) => {
           )
           : null
       }
-    </>
+    </div>
   );
 };

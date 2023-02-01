@@ -10,7 +10,7 @@ interface Props {
 }
 
 const CardTitleEl = styled.div`
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   font-weight: bold;
   text-align: center;
   background-color: var(--gray-300);
@@ -23,7 +23,7 @@ const CardTitleEl = styled.div`
 `;
 
 const CardBodyEl = styled.div`
-  font-size: 1rem;
+  font-size: 1rem !important;
   padding: 0.5rem 0;
   background-color: var(--gray-100);
 `;
@@ -69,7 +69,7 @@ export const SideBarCardTable = (props: Props) => {
     updateISO3,
   } = useContext(Context) as CtxDataType;
   return (
-    <div style={{ maxHeight: '18.75rem', overflow: 'auto' }} className='undp-scrollbar'>
+    <div style={{ maxHeight: '25rem', overflow: 'auto' }} className='undp-scrollbar'>
       <CardTitleEl>
         {title}
         {' '}

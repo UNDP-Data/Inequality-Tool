@@ -87,14 +87,17 @@ const Button = styled.button`
   }
 `;
 
-const ColorHelpEl = styled.div`
-  color: var(--black-700);
-  font-weight: bold;
-  font-size: 0.875rem !important;
+const ColorHelpContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
   margin-bottom: 0;
+`;
+
+const ColorHelpEl = styled.div`
+  color: var(--black-700);
+  font-weight: bold;
+  font-size: 0.875rem !important;
 `;
 
 const InfoPanelEl = styled.div`
@@ -103,7 +106,7 @@ const InfoPanelEl = styled.div`
   z-index: 5;
   position: absolute;
   left: 1rem;
-  width: 17.5rem;
+  width: 19rem;
   top: 0;
 `;
 
@@ -178,9 +181,11 @@ export const Map = (props: Props) => {
           <>
             <div id='graph-node' ref={GraphRef}>
               <InfoPanelEl className='undp-scrollbar'>
-                {
-                  Country !== 'World' ? <button onClick={() => { updateCountry('World'); updateISO3(''); }} type='button' className='undp-button button-tertiary' style={{ marginLeft: 'var(--spacing-05)', paddingBottom: 0, fontSize: '0.75rem' }}>← Back to Global View</button> : null
-                }
+                <div style={{ marginLeft: 'var(--spacing-05)' }}>
+                  {
+                    Country !== 'World' ? <button onClick={() => { updateCountry('World'); updateISO3(''); }} type='button' className='undp-button button-tertiary' style={{ paddingBottom: 0, fontSize: '0.75rem' }}>← Back to Global View</button> : null
+                  }
+                </div>
                 <h4 style={{ margin: 'var(--spacing-05)' }}>
                   {Country}
                 </h4>
@@ -323,18 +328,18 @@ export const Map = (props: Props) => {
                     )
                     : null
                 }
-                <ColorHelpEl>
-                  <div>
+                <ColorHelpContainer>
+                  <ColorHelpEl>
                     ←
                     {' '}
                     {Indicator === 'b40T10RatioWID' ? 'Higher Inequality' : 'Lower Income Share'}
-                  </div>
-                  <div>
+                  </ColorHelpEl>
+                  <ColorHelpEl>
                     {Indicator === 'b40T10RatioWID' ? 'Lower Inequality' : 'Higher Income Share'}
                     {' '}
                     →
-                  </div>
-                </ColorHelpEl>
+                  </ColorHelpEl>
+                </ColorHelpContainer>
                 <FlexDiv>
                   {
                     array.map((d, i) => (
