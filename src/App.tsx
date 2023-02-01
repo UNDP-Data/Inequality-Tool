@@ -45,7 +45,7 @@ const App = () => {
     });
   };
   useEffect(() => {
-    csv('./data/b40t10share_wid.csv', (error, data) => {
+    csv('https://raw.githubusercontent.com/UNDP-Data/Inequality-Tool/main/public/data/b40t10share_wid.csv', (error, data) => {
       if (error) throw error;
       const dataFetched = data.map((d:any) => ({
         country: d.country,
