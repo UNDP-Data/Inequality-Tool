@@ -70,7 +70,7 @@ const ColorKeyEl = styled.div<ColorKeyElProps>`
 
 const KeyValue = styled.p`
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
   font-weight: normal;
   margin: 0;
 `;
@@ -90,7 +90,7 @@ const Button = styled.button`
 const ColorHelpEl = styled.div`
   color: var(--black-700);
   font-weight: bold;
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;

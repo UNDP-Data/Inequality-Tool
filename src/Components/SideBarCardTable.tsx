@@ -28,7 +28,7 @@ const CardBodyEl = styled.div`
   background-color: var(--gray-100);
 `;
 
-const RowEl = styled.span`
+const RowEl = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +49,7 @@ const IndexEl = styled.div`
 `;
 
 const Span = styled.span`
-  font-size: 0.75rem;
+  font-size: 0.75rem !important;
   text-transform: none;
   font-weight: normal;
   font-style: italic;
