@@ -1,11 +1,20 @@
 import { csv } from 'd3-request';
 import { nest } from 'd3-collection';
 import { useEffect, useState, useReducer } from 'react';
+import styled from 'styled-components';
 import { DataType, YearListDataType } from './Types';
 import { MapViz } from './MapViz';
 import { DumbellChartViz } from './DumbellChartViz';
 import Reducer from './Context/Reducer';
 import Context from './Context/Context';
+
+const VizAreaEl = styled.div`
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+`;
 
 const App = () => {
   const [finalData, setFinalData] = useState<DataType[] | undefined>(undefined);
@@ -112,7 +121,9 @@ const App = () => {
             </div>
           )
           : (
-            <div className='undp-loader' />
+            <VizAreaEl className='undp-container'>
+              <div className='undp-loader' />
+            </VizAreaEl>
           )
         }
     </>
