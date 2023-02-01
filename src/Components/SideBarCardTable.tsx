@@ -46,6 +46,7 @@ const LeftEl = styled.div`
 const IndexEl = styled.div`
   width: 1.25rem;
   margin-right: 0.75rem;
+  font-size: 1rem !important;
 `;
 
 const Span = styled.span`
@@ -85,11 +86,11 @@ export const SideBarCardTable = (props: Props) => {
               <IndexEl>
                 {i + 1}
               </IndexEl>
-              <div className='bold'>
+              <div className='bold' style={{ fontSize: '1rem' }}>
                 {d.country}
               </div>
             </LeftEl>
-            <div>
+            <div style={{ fontSize: '1rem' }}>
               {Indicator === 'b40T10RatioWID' ? d.data[d.data.findIndex((el) => el.year === Year)].b40T10RatioWID.toFixed(3) : `${(d.data[d.data.findIndex((el) => el.year === Year)][Indicator] * 100).toFixed(2)}%`}
             </div>
           </RowEl>

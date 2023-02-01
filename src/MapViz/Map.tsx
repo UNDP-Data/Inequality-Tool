@@ -319,7 +319,7 @@ export const Map = (props: Props) => {
                   colorSettingVisible
                     ? (
                       <Radio.Group defaultValue='b40T10RatioWID' onChange={(el) => { updateIndicator(el.target.value); }}>
-                        <Space direction='vertical'>
+                        <Space direction='vertical' style={{ fontSize: '1rem' }}>
                           <Radio className='undp-radio' value='b40T10RatioWID'>Income Share Ratio: Bottom 40% / Top 10%</Radio>
                           <Radio className='undp-radio' value='bottom40WID'>Income Share: Bottom 40%</Radio>
                           <Radio className='undp-radio' value='top10WID'>Income Share: Top 10%</Radio>
